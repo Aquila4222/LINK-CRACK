@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputController : MonoBehaviour
+public class InputController : MonoSingletonHungry<InputController>
 {
     /// <summary>
     /// 移动向量
@@ -97,25 +97,25 @@ public class InputController : MonoBehaviour
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("Jump performed!");
-        jumpAction();
+        jumpAction?.Invoke();
     }
     
     private void OnLinkPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("Link performed!");
-        linkAction();
+        linkAction?.Invoke();
     }
 
     private void OnUnlinkPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("Unlink performed!");
-        unlinkAction();
+        unlinkAction?.Invoke();
     }
     
     private void OnSwitchLinkPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("Switch link performed!");
-        switchLinkAction();
+        switchLinkAction?.Invoke();
     }
 
 }
