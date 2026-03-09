@@ -460,9 +460,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6762986613730704846}
   - component: {fileID: 208759306243331902}
+  - component: {fileID: -5123706389512152759}
   - component: {fileID: 3369746688739507033}
   - component: {fileID: 5934666757162114986}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -504,6 +505,25 @@ MonoBehaviour:
   RayHeight: -0.56
   RayLength: 0.99
   JumpForce: 15
+--- !u!114 &-5123706389512152759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170904990461181316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039706f017d82524195e5bb07cdb741f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRopeLength: 4
+  pullSpring: 500
+  pullDamper: 30
+  testRB: {fileID: 0}
+  chainedRB: {fileID: 0}
+  Force: 50
+  ChainRange: 5
 --- !u!50 &3369746688739507033
 Rigidbody2D:
   serializedVersion: 4
