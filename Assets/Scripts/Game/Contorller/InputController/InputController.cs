@@ -96,25 +96,21 @@ public class InputController : MonoSingletonHungry<InputController>
     
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("Jump performed!");
         jumpAction?.Invoke();
     }
     
     private void OnLinkPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("Link performed!");
         linkAction?.Invoke();
     }
 
     private void OnUnlinkPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("Unlink performed!");
         unlinkAction?.Invoke();
     }
     
     private void OnSwitchLinkPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("Switch link performed!");
         switchLinkAction?.Invoke();
     }
 
