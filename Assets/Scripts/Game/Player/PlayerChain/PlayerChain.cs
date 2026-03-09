@@ -24,6 +24,8 @@ public class PlayerChain : MonoBehaviour
    
    private Camera mainCamera;
 
+   private ChainVE chainVE;
+
    void Awake()
    {
       InputController.Instance.RegisterLink(ChainInput);
@@ -31,35 +33,18 @@ public class PlayerChain : MonoBehaviour
       InputController.Instance.RegisterLinkSwitch(SwitchChainInput);
       
       mainCamera = Camera.main;
+      
+      chainVE =  GetComponentInChildren<ChainVE>();
    }
 
    void FixedUpdate()
    {
-
-      
-      
-
       if (isChaining && chainedMono != null)
       {
          Vector2 mouseScreenPosition = Input.mousePosition;
          Vector2 mouseWorldPosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
          chainedMono.rb.AddForce(((Vector2)mouseWorldPosition - (Vector2)chainedMono.rb.transform.position)*Force);
-
-         // if ((chainedRB.transform.position - transform.position).magnitude > ChainRange)
-         // {
-         //    Vector2 b1 = chainedRB.transform.position-transform.position;
-         //    Vector2 b = b1.normalized;
-         //    Vector2 a = chainedRB.velocity;
-         //    
-         //    Vector2 c = Vector2.Dot(a,b)*b;
-         //    
-         //    chainedRB.velocity -= 2*c;
-         //    
-         //    Vector3 pos = (chainedRB.transform.position-transform.position).normalized*(ChainRange*0.99f);
-         //    chainedRB.MovePosition(transform.position + pos);
-         // }
          
-     
          Vector3 objToAnchor = transform.position- chainedMono.rb.transform.position;
          float currentDistance = objToAnchor.magnitude;
 
@@ -83,8 +68,13 @@ public class PlayerChain : MonoBehaviour
         
             chainedMono.rb.AddForce(pullForce - dampingForce);
          }
+         
+         chainVE.SetChain(transform.position,chainedMono.rb.transform.position,mouseWorldPosition);
       }
-       
+      else
+      {
+         chainVE.DisableAll();
+      }
    }
    
    
