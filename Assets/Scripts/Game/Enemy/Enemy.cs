@@ -13,5 +13,6 @@ enum EnemyStateType
 
 public class Enemy : MonoBehaviour
 {
+    public static Transform PlayerPosition { get; set; }
     protected float Health { get; set; }
 }
