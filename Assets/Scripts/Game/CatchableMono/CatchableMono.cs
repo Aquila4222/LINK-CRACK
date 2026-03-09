@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CatchableMono : MonoBehaviour
 {
-    private const float CrashSpeed = 10f;
+    private const float CrashSpeed = 30f;
     
     public Rigidbody2D rb
     {
@@ -27,6 +27,41 @@ public class CatchableMono : MonoBehaviour
 
     protected bool isChained;
 
+    private Vector2 maxSpeed;
+    private float timer;
+    private bool isRising;
+
+
+    void FixedUpdate()
+    {
+        if (rb.velocity.magnitude > maxSpeed.magnitude)
+        {
+            maxSpeed = rb.velocity;
+            timer = 0.05f;
+            isRising =  true;
+        }
+        else
+        {
+            if (isRising)
+            {
+                if (timer >= 0)
+                {
+                    timer -= Time.deltaTime;
+                }
+                else
+                {
+                    maxSpeed = rb.velocity;
+                    isRising = false;
+                }
+            }
+            else
+            {
+                maxSpeed = rb.velocity;
+            }
+        }
+    }
+    
+    
     public void Chain()
     {
         isChained = true;
@@ -41,7 +76,8 @@ public class CatchableMono : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            if (rb.velocity.magnitude > CrashSpeed && isChained)
+            Vector2 normal = collision.contacts[0].normal;
+            if (Vector2.Dot(maxSpeed,-normal) > CrashSpeed && isChained)
             {
                 OnCrash();
             }

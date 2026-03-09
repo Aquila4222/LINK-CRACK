@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-public abstract class ObjectPoolTemplate : MonoBehaviour //<T> :MonoSingletonHungry<T> where T : ObjectPoolTemplate<T>
+public abstract class ObjectPoolTemplate<T> :MonoSingletonHungry<T> where T : ObjectPoolTemplate<T>
 {
     private List<GameObject> _objectPool = new List<GameObject>();
 

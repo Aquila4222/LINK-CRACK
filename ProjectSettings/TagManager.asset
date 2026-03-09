@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: SpecialEffect
+    uniqueID: 814227737
+    locked: 0
