@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WoodBox : CatchableMono
+public class Box : CatchableMono
 {
     private SpriteRenderer sr;
 
@@ -28,7 +28,7 @@ public class WoodBox : CatchableMono
         {
             for (int i = 0; i < 20; i++)
             {
-                PhysicalVEPool.Instance.Play(transform.position,Random.Range(1f,3f),Random.onUnitSphere.normalized*Random.Range(20f,30f),Vector3.one*0.4f,ObjectColor);
+                PhysicalVEPool.Instance.Play(transform.position + new Vector3(Random.Range(-transform.localScale.x,transform.localScale.x),Random.Range(-transform.localScale.y,transform.localScale.y),1),Random.Range(1f,3f),Random.onUnitSphere.normalized*Random.Range(20f,30f),Vector3.one*0.4f,ObjectColor);
             }
             GameObject.Destroy(gameObject);
         }

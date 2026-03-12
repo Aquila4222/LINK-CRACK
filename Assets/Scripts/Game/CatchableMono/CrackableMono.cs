@@ -12,7 +12,7 @@ public class CrackableMono : MonoBehaviour
         if (c)
         {
             Vector2 normal = collision.contacts[0].normal;
-            // if (Vector2.Dot(c.maxSpeed,normal) > CrashSpeed && c.canHurtOther)
+            if (Vector2.Dot(c.maxSpeed,normal) > CrashSpeed && c.canHurtOther)
             {
                 OnCrash(collision.contacts[0]);
             }

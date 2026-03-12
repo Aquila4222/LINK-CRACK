@@ -26,7 +26,7 @@ public class CatchableMono : MonoBehaviour
     private Rigidbody2D _rb;
 
     protected bool isChained;
-    protected bool canHurtOther;
+    public bool canHurtOther;
     
     private float hurtTimer;
 
