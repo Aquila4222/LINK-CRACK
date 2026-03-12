@@ -3,20 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FSM<TStateEnum> where TStateEnum: Enum
+public class FSM<TStateEnum,TContext> where TStateEnum: Enum
 {
-    private Dictionary<TStateEnum,IState<TStateEnum>>  _states = new Dictionary<TStateEnum,IState<TStateEnum>>();
+    private Dictionary<TStateEnum,IState<TStateEnum,TContext>>  _states = new Dictionary<TStateEnum,IState<TStateEnum,TContext>>();
 
     public TStateEnum CurrentEnumState { get; private set; }
-    public IState<TStateEnum> CurrentIState { get; private set; }
+    public IState<TStateEnum,TContext> CurrentIState { get; private set; }
     
     /// <summary>
-    /// 构造方法，注入当前状态
+    /// 构造方法
     /// </summary>
-    /// <param name="currentState"></param>
-    public FSM(TStateEnum currentState)
+    public FSM(TStateEnum stateEnum,IState<TStateEnum,TContext> state)
     {
-        CurrentEnumState = currentState;
+        CurrentEnumState = stateEnum;
+        CurrentIState = state;
+        _states.Add(stateEnum, state);
+        
     }
 
     /// <summary>
@@ -24,9 +26,9 @@ public class FSM<TStateEnum> where TStateEnum: Enum
     /// </summary>
     /// <param name="stateEnum"></param>
     /// <param name="state"></param>
-    public void AddState(TStateEnum stateEnum, IState<TStateEnum> state)
+    public void AddState(TStateEnum stateEnum, IState<TStateEnum,TContext> state)
     {
-        _states.Add(stateEnum, state);
+        _states.TryAdd(stateEnum, state);
     }
     
     /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -13,57 +14,152 @@ public enum MeleeStateType
 
 public class MeleeEnemy : Enemy
 {
-    private FSM<MeleeStateType> meleeFSM;
+    //状态机
+    private FSM<MeleeStateType,MeleeEnemy> meleeFSM;
 
+    [Header("角色参数")]
+    [SerializeField] public Vector3 facingDirection;
+    [SerializeField] public Rigidbody2D rigidBody;
+    
     [Header("状态转换条件")]
-    [SerializeField] private Transform targetTransform;
+    [SerializeField] public Transform targetTransform;
     [SerializeField] private bool lockedPlayer;
+    [SerializeField] private bool inSight;
     [SerializeField] private bool sightObstructed;
     [SerializeField] private bool canAttack;
+    [SerializeField] public bool onAttack;
     
     [Header("检测参数")]
     [SerializeField] private Collider2D[] detectedColliders;
+    [SerializeField] private Collider2D[] attackColliders;
     [SerializeField] private float detectRadius;
+    [SerializeField] private float attackRadius;
+    [SerializeField] private Vector3 attackSize;
+    [SerializeField] private Vector3 jumpDetectionStartOffsetDistance;
+    [SerializeField] private Vector3 jumpDetectionEndOffsetDistance;
+    [SerializeField] private Vector3 fallDetectionOffsetDistance;
+    [SerializeField] private float fallDetectionDistance;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private LayerMask whatIsObstruction;
-    [SerializeField] private float attackRadius;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private float maxLockTime;
+    [SerializeField] private float lockTime;
+    [SerializeField] public bool onGroundForJump;
+    [SerializeField] private bool onGroundForFalling;
+
+    [Header("调试状态参数")]
+    [SerializeField] private MeleeStateType meleeState;
+    [SerializeField] public float maxTurnAroundTime;
+    [SerializeField] public float turnAroundTime;
+    [SerializeField] public float patrolSpeed;
+    [SerializeField] public float chaseSpeed;
     
+    [Header("攻击状态参数")]
+    [SerializeField] public float maxAccumulateTime;
+    [SerializeField] public Vector2 spikeDirection;
+    [SerializeField] public float attackProbability;
+    [SerializeField] public float attackMaxTime;
+    [SerializeField] public float attackStartMinTime;
+    [SerializeField] public int attackState;
+    [SerializeField] public Vector3 spikeOffsetDistance;
+    [SerializeField] public float spikeMaxTime;
+    [SerializeField] public Transform animationTransform;
+    [SerializeField] public float damageStartTime;
+    [SerializeField] public float damageContinueTime;
 
     public void Initialized()
     {
+        facingDirection = new Vector2(transform.localScale.x, 0);
+        rigidBody = GetComponent<Rigidbody2D>();
+        detectedColliders = new Collider2D[1];
+        attackColliders = new Collider2D[1];
         
+        //状态机初始化
+        MeleePatrol meleePatrol = new(this);
+        MeleeChase meleeChase = new(this);
+        MeleeAttack meleeAttack = new MeleeAttack(this);
+        
+        meleeFSM = new FSM<MeleeStateType, MeleeEnemy>(MeleeStateType.Patrolling, meleePatrol);
+        meleeFSM.AddState(MeleeStateType.Patrolling,meleePatrol);
+        meleeFSM.AddState(MeleeStateType.Chasing,meleeChase);
+        meleeFSM.AddState(MeleeStateType.Attacking,meleeAttack);
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Initialized();
     }
 
     // Update is called once per frame
     void Update()
     {
+        meleeState = meleeFSM.CurrentEnumState;
+
+        facingDirection = transform.localScale;
+        
+        Detect();
+        JudgeState();
         meleeFSM.OnState();
     }
 
     /// <summary>
-    /// 视野检测
+    /// 攻击
+    /// </summary>
+    public void Attack()
+    {
+        //TODO:角色受击调用
+        int attackNum = Physics2D.OverlapBoxNonAlloc(transform.position + spikeOffsetDistance * facingDirection.x / 2,attackSize + spikeOffsetDistance,0,attackColliders,whatIsPlayer);
+        if (attackNum > 0)
+        {
+            Debug.Log("Attack Player");
+            //attackColliders[0].gameObject.GetComponent<>()
+        }
+    }
+    
+    /// <summary>
+    /// 移动
+    /// </summary>
+    /// <param name="speed"></param>
+    /// <param name="direction"></param>
+    public void Move(float speed,Vector2 direction)
+    {
+        if (rigidBody != null && onGroundForFalling)
+        {
+            rigidBody.velocity = new Vector2(direction.x * speed, rigidBody.velocity.y);
+        }
+    }
+    
+    /// <summary>
+    /// 转身
+    /// </summary>
+    public void TurnAround()
+    {
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+    }
+    
+    /// <summary>
+    /// 条件检测
     /// </summary>
     private void Detect()
     {
         //检测圆形范围内是否有角色
         int detectedColliderNum = Physics2D.OverlapCircleNonAlloc(transform.position, detectRadius, detectedColliders, whatIsPlayer);
+        inSight = detectedColliderNum > 0;
         if (detectedColliderNum > 0)
         {
             lockedPlayer = true;
+            lockTime = maxLockTime;
             targetTransform = detectedColliders[0].transform;
         }
+        
 
         //锁定角色后进行视线判定
         if (lockedPlayer)
         {
             sightObstructed = Physics2D.Linecast(transform.position, targetTransform.position, whatIsObstruction);
-            if (Vector2.Distance(targetTransform.position, transform.position) < attackRadius)
+            if (Vector2.Distance(targetTransform.position, transform.position) < attackRadius && !sightObstructed)
             {
                 canAttack = true;
             }
@@ -71,8 +167,27 @@ public class MeleeEnemy : Enemy
             {
                 canAttack = false;
             }
+
+            /*if (Vector2.Distance(targetTransform.position, transform.position) > detectRadius)
+            {
+                detectedColliders[0] = null;
+            }*/
         }
 
+        //脱离视野后回正
+        if (detectedColliderNum == 0 && lockedPlayer)
+        {
+            lockTime -= Time.deltaTime;
+            if (lockTime <= 0)
+            {
+                lockedPlayer = false;
+                targetTransform = null;
+            }
+        }
+        
+        //TODO:地面检测(分坠崖检测和跳跃检测两部分）
+        onGroundForJump = Physics2D.Linecast(transform.position + jumpDetectionStartOffsetDistance, transform.position + jumpDetectionEndOffsetDistance, whatIsGround);
+        onGroundForFalling = Physics2D.Raycast(transform.position + new Vector3(fallDetectionOffsetDistance.x * facingDirection.x,fallDetectionOffsetDistance.y,fallDetectionOffsetDistance.z),Vector2.down,fallDetectionDistance,whatIsGround);
         
     }
 
@@ -81,19 +196,46 @@ public class MeleeEnemy : Enemy
     /// </summary>
     private void JudgeState()
     {
-        /*switch (meleeFSM.CurrentEnumState)
+        switch (meleeFSM.CurrentEnumState)
         {
             case MeleeStateType.Attacking:
-                
+                if (!lockedPlayer && !inSight && !onAttack)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Patrolling);
+                }
+                else if (lockedPlayer && !canAttack && !sightObstructed &&!onAttack)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Chasing);
+                }
+                break;
             case MeleeStateType.Patrolling:
+                if (lockedPlayer && canAttack)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Attacking);
+                }
+                else if (lockedPlayer && !sightObstructed)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Chasing);
+                }
                 
+                break;
             case MeleeStateType.Chasing:
-                
+                if (inSight && lockedPlayer && canAttack)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Attacking);
+                }
+                else if(!lockedPlayer && !inSight)
+                {
+                    meleeFSM.SwitchState(MeleeStateType.Patrolling);
+                }
+
+                break;
             default:
-        }*/
+                break;
+        }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         // 绘制检测半径（半透明，表示范围）
         Gizmos.color = new Color(0, 1, 0, 0.3f); // 半透明绿
@@ -137,5 +279,20 @@ public class MeleeEnemy : Enemy
                 }
             }
         }
+        
+        Vector3 jumpStart = transform.position + (Vector3)jumpDetectionStartOffsetDistance;
+        Vector3 jumpEnd   = transform.position + (Vector3)jumpDetectionEndOffsetDistance;
+
+        // 根据检测结果设置颜色（需要运行时才能得到结果，编辑模式下可能为false）
+        // 如果想在编辑模式下也看到固定颜色，可以直接使用一种颜色
+        Gizmos.color = onGroundForJump ? Color.red : Color.green;
+        Gizmos.DrawLine(jumpStart, jumpEnd);
+
+        // 2. 绘制下落检测射线（Raycast）
+        Vector3 fallStart = transform.position + (Vector3)fallDetectionOffsetDistance;
+        Vector3 fallEnd   = fallStart + Vector3.down * fallDetectionDistance;
+
+        Gizmos.color = onGroundForFalling ? Color.red : Color.green;
+        Gizmos.DrawLine(fallStart, fallEnd);
     }
 }
