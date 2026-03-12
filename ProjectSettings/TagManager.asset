@@ -50,6 +50,9 @@ TagManager:
   - name: Character
     uniqueID: 2950550481
     locked: 0
+  - name: Enemy
+    uniqueID: 1417456351
+    locked: 0
   - name: SpecialEffect
     uniqueID: 814227737
     locked: 0
