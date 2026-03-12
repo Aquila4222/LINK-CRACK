@@ -65,13 +65,13 @@ public class Enemy : CatchableMono,IHurt
         if (!DetectOnGround())
         {
             currentState = EnemyStateType.OnFroze;
-            rb.freezeRotation = true;
+            rb.freezeRotation = false;
         }
         else if (canHurtOther && Health > 0)
         {
             currentState = EnemyStateType.OnFroze;
             rb.velocity = new Vector2(0,rb.velocity.y);
-            rb.freezeRotation = true;
+            rb.freezeRotation = false;
         }
         else if (Health <= 0)
         {
@@ -96,7 +96,7 @@ public class Enemy : CatchableMono,IHurt
         if (!canHurtOther && Health > 0 && DetectOnGround())
         {
             currentState = EnemyStateType.Alive;
-            rb.freezeRotation = false;
+            rb.freezeRotation = true;
         }
         else if (Health <= 0)
         {
