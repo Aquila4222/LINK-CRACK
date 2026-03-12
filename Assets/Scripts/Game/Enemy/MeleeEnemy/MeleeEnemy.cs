@@ -142,6 +142,10 @@ public class MeleeEnemy : Enemy
         {
             rigidBody.velocity = new Vector2(direction.x * speed, rigidBody.velocity.y);
         }
+        else
+        {
+            rigidBody.velocity = Vector2.zero;
+        }
     }
     
     /// <summary>

@@ -139,13 +139,11 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         {
             spikeTime -= Time.deltaTime;
             animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
-            animationTransform.localScale = new Vector3(Context.transform.localScale.x * -1, Context.transform.localScale.y, Context.transform.localScale.z);
         }
         else if (spikeTime <= spikeMaxTime && spikeTime > 0)
         {
             spikeTime -= Time.deltaTime;
             animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
-            animationTransform.localScale = Context.transform.localScale;
         }
         //改动动画注释掉上述代码换位下述代码即可
         /*if (spikeTime > 0)

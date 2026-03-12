@@ -7,12 +7,7 @@ public class RomoteEnemyBarragePool : ObjectPoolTemplate<RomoteEnemyBarragePool>
 
     public override void Awake()
     {
-        objectPrefab = Resources.Load<GameObject>("Prefabs/Box");
-        warmCount = 100;
-        poolSize = 100;
-        
         base.Awake();
-        
     }
 
     // Start is called before the first frame update
