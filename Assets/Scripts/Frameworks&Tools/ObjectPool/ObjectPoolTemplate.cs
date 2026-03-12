@@ -29,7 +29,6 @@ public abstract class ObjectPoolTemplate<T> :MonoSingletonHungry<T> where T : Ob
 
     public virtual void Awake()
     {
-        Debug.Log("ObjectPoolTemplate Awake");
         InitializeObjectPool();
 
         SceneManager.sceneLoaded += OnSceneLoaded;

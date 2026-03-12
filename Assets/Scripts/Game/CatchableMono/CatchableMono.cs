@@ -64,7 +64,7 @@ public class CatchableMono : MonoBehaviour
         }
     }
 
-    void Update()
+    protected void Update()
     {
         if (isChained)
         {
