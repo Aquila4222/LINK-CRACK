@@ -4,10 +4,66 @@ using UnityEngine;
 
 public class WoodBox : CatchableMono
 {
-    protected override void OnCrash()
+    private SpriteRenderer sr;
+
+    private int blood;
+
+    public Color ObjectColor;
+    
+    void Awake()
     {
-        base.OnCrash();
+        sr = GetComponent<SpriteRenderer>();
+        sr.enabled = false;
+        blood = 5;
+    }
+
+
+    private void Hurt()
+    {
+        if (blood > 1)
+        {
+            blood--;
+        }
+        else
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                ParticleVEPool.Instance.Play(transform.position,0.6f*Random.Range(1,1.5f),10*Random.Range(0,1f),Random.onUnitSphere.normalized,new Vector3(0.2f,0.2f,1),new Vector3(1,1,1),ObjectColor);
+            }
+            GameObject.Destroy(gameObject);
+        }
+    }
+    
+    IEnumerator HurtEffect()
+    {
+        sr.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        sr.enabled = false;
+    }
+    
+    protected override void OnCrash(ContactPoint2D contact)
+    {
+        base.OnCrash(contact);
         Debug.Log(gameObject.name + ": Crashed!");
-        RingVEPool.Instance.Play(transform.position,0.15f,Color.white,0.8f,4f);
+        RingVEPool.Instance.Play(contact.point,0.15f,Color.white,0.8f,4f);
+        CameraControl.Instance.Shock(contact.point);
+        for (int i = 0; i < 10; i++)
+        {
+            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.white);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.right, contact.normal);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,1.5f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.left, contact.normal);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,1.5f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+        }
+        
+        StartCoroutine(HurtEffect());
+        Hurt();
+
     }
 }

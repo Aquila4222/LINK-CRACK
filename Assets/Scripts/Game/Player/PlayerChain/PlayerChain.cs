@@ -12,8 +12,7 @@ public class PlayerChain : MonoBehaviour
    public float pullDamper = 10f;     // 阻尼（减少晃动）
     
    
-   public CatchableMono testMono;
-   
+  
    public CatchableMono chainedMono;
    
    public float Force;
@@ -122,7 +121,11 @@ public class PlayerChain : MonoBehaviour
      
          AimPos = AimTransform.position;
       }
-      
+
+      if (!chainedMono)
+      {
+         UnChain();
+      }
    }
    
    private void UnChain()

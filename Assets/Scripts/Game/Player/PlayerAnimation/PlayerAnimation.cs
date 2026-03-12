@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerAnimation : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class PlayerAnimation : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    private float effectTimer;
+    
     void Awake()
     {
         rb = GetComponentInParent<Rigidbody2D>();
@@ -166,6 +169,16 @@ public class PlayerAnimation : MonoBehaviour
             transform.localScale = new Vector3(1 + w, 1 + h, 1);
             
             transform.localPosition = new Vector3(0, h/2, 0);
+
+            if (effectTimer < 0.2f)
+            {
+                effectTimer += Time.deltaTime;
+            }
+            else
+            {
+                effectTimer = 0;
+                ParticleVEPool.Instance.Play(transform.position-new Vector3(Move*0.5f,0.5f,0),0.3f,5,new Vector2(-Move,Random.Range(0.2f,0.5f)), new Vector3(0.1f,0.1f,0.1f),new Vector3(0.2f,0.2f,0.2f),Color.white);
+            }
         }
 
         if (state == AnimationState.Jumping)

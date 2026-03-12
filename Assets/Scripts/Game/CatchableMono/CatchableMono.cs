@@ -106,7 +106,7 @@ public class CatchableMono : MonoBehaviour
                 Vector2 normal = collision.contacts[0].normal;
                 if (Vector2.Dot(maxSpeed,-normal) > CrashSpeed && canHurtOther)
                 {
-                    OnCrash();
+                    OnCrash(collision.contacts[0]);
                 }
             }
         }
@@ -119,13 +119,13 @@ public class CatchableMono : MonoBehaviour
                 Vector2 normal = collision.contacts[0].normal;
                 if (Vector2.Dot(c.maxSpeed,normal) > CrashSpeed && c.canHurtOther)
                 {
-                    OnCrash();
+                    OnCrash(collision.contacts[0]);
                 }
             }
         }
     }
 
-    protected virtual void OnCrash()
+    protected virtual void OnCrash(ContactPoint2D contact)
     {
         
     }

@@ -9,8 +9,10 @@ public class ChainVE : MonoBehaviour
     public float MaxPull;
     
     public GameObject ring;
+    public GameObject Square;
     
     private GameObject[] chainsRing = new GameObject[20];
+    private GameObject[] chainsSquare = new GameObject[19];
     
     
 
@@ -23,8 +25,16 @@ public class ChainVE : MonoBehaviour
             chainsRing[i].transform.localPosition = Vector3.zero;
             chainsRing[i].name = "Ring " + i;
         }
+        for (int i = 0; i < chainsSquare.Length; i++)
+        {
+            chainsSquare[i] = GameObject.Instantiate(Square);
+            chainsSquare[i].transform.parent = transform;
+            chainsSquare[i].transform.localPosition = Vector3.zero;
+            chainsSquare[i].name = "Square " + i;
+        }
         
         ring.SetActive(false);
+        Square.SetActive(false);
     }
 
     public void SetChain(Vector2 objectPos, Vector2 playerPos , Vector2 pullPos)
@@ -87,6 +97,13 @@ public class ChainVE : MonoBehaviour
             chainsRing[i].transform.localPosition = VectorRotator.RotateLike(Vector2.right, Vector2.left, chainsRing[i].transform.localPosition);
             
         }
+        
+        for (int i = 0; i < chainsRing.Length-1; i++)
+        {
+            chainsSquare[i].transform.position = (chainsRing[i].transform.position+chainsRing[i+1].transform.position)/2f;
+            chainsSquare[i].transform.right = chainsRing[i].transform.position-chainsRing[i+1].transform.position;
+        }
+        
     }
 
     public void EnableAll()
@@ -95,6 +112,11 @@ public class ChainVE : MonoBehaviour
         {
             chainRing.SetActive(true);
         }
+
+        foreach (var chainSquare in chainsSquare)
+        {
+            chainSquare.SetActive(true);
+        }
     }
     
     public void DisableAll()
@@ -102,6 +124,10 @@ public class ChainVE : MonoBehaviour
         foreach (var chainRing in chainsRing)
         {
             chainRing.SetActive(false);
+        }
+        foreach (var chainSquare in chainsSquare)
+        {
+            chainSquare.SetActive(false);
         }
     }
     
