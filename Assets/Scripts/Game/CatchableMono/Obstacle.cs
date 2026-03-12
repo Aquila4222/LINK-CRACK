@@ -23,6 +23,9 @@ public class Obstacle : CrackableMono
     protected override void OnCrash(ContactPoint2D contact)
     {
         base.OnCrash(contact);
+        RingVEPool.Instance.Play(contact.point,0.15f,Color.white,0.8f,4f);
+        CameraControl.Instance.Shock(contact.point);
+        
         StartCoroutine(HurtEffect());
         Hurt(contact);
 

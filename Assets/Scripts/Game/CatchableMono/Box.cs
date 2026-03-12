@@ -44,7 +44,6 @@ public class Box : CatchableMono
     protected override void OnCrash(ContactPoint2D contact)
     {
         base.OnCrash(contact);
-        Debug.Log(gameObject.name + ": Crashed!");
         RingVEPool.Instance.Play(contact.point,0.15f,Color.white,0.8f,4f);
         CameraControl.Instance.Shock(contact.point);
         for (int i = 0; i < 10; i++)

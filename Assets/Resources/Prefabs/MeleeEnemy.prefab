@@ -303,6 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
+  drawLine: 0
   facingDirection: {x: 0, y: 0, z: 0}
   rigidBody: {fileID: 0}
   targetTransform: {fileID: 0}
@@ -427,6 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2363806901811200222}
   - component: {fileID: 3579982614670187807}
+  - component: {fileID: 4565673112815790921}
   m_Layer: 8
   m_Name: Ainmator
   m_TagString: Untagged
@@ -460,7 +462,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3062153005331531709}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -505,6 +507,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4565673112815790921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3062153005331531709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4df65f5fd0994f8e70c6f71365c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BreathSpeed: 0.5
+  BreathRange: 0.1
+  WalkSpeed: 4
+  WalkRange: 0.15
+  JumpSpeed: 0.02
+  JumpRange: 0.1
+  LandingSpeed: 8
+  LandingRange: 0.2
+  state: 0
+  timer: 0
+  direction: 1
 --- !u!1 &4303475101737652148
 GameObject:
   m_ObjectHideFlags: 0
