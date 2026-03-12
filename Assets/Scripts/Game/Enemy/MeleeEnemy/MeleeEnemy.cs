@@ -91,8 +91,9 @@ public class MeleeEnemy : Enemy
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
+        base.Update();
         meleeState = meleeFSM.CurrentEnumState;
 
         facingDirection = transform.localScale;
