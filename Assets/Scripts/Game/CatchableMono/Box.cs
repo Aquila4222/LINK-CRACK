@@ -54,12 +54,12 @@ public class Box : CatchableMono
         for (int i = 0; i < 5; i++)
         {
             Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.right, contact.normal);
-            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,1.5f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
         }
         for (int i = 0; i < 5; i++)
         {
             Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.left, contact.normal);
-            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,1.5f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
         }
         
         StartCoroutine(HurtEffect());

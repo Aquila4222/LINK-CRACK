@@ -28,7 +28,7 @@ public class Obstacle : CrackableMono
 
         for (int i = 0; i < 10; i++)
         {
-            ParticleVEPool.Instance.Play(transform.position+new Vector3(Random.Range(-transform.localScale.x,transform.localScale.x),Random.Range(-transform.localScale.y,transform.localScale.y),1),1f*Random.Range(1,1.5f),0,Vector2.down,new Vector3(0.3f,0.3f,1),new Vector3(0.3f,0.3f,1),ObjectColor,true);
+            ParticleVEPool.Instance.Play(transform.position+new Vector3(Random.Range(-transform.localScale.x,transform.localScale.x),Random.Range(-transform.localScale.y,transform.localScale.y),1),0.5f*Random.Range(1,1.5f),0,Vector2.down,new Vector3(0.3f,0.3f,1),new Vector3(0.3f,0.3f,1),ObjectColor,true);
         }
     }
     
