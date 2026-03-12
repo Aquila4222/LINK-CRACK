@@ -23,13 +23,14 @@ public class ParticleVEPool : ObjectPoolTemplate<ParticleVEPool>
     /// <param name="startScale"></param>
     /// <param name="endScale"></param>
     /// <param name="color"></param>
+    /// <param name="dofall"></param>
     public void Play(Vector3 pos, float duration, float speed, Vector2 direction, Vector3 startScale, Vector3 endScale,
-        Color color)
+        Color color,bool dofall = false)
     {
         ParticleVE effect = GetObject().GetComponent<ParticleVE>();
         if (effect)
         {
-            effect.Play(pos, duration,speed ,direction, startScale, endScale, color);
+            effect.Play(pos, duration,speed ,direction, startScale, endScale, color,dofall);
         }
     }
 }

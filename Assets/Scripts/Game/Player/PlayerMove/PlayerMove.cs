@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
     public float MoveSpeed;
     
     public LayerMask GroundMask;
+    public LayerMask ObjectMask;
 
     public float RayHeight;
     public float RayLength;
@@ -59,7 +60,8 @@ public class PlayerMove : MonoBehaviour
             xDirection = 0;
         }
         
-        isGrounded = Physics2D.Raycast(transform.position + new Vector3(-RayLength/2,RayHeight), Vector2.right, RayLength, GroundMask);
+        isGrounded = Physics2D.Raycast(transform.position + new Vector3(-RayLength/2,RayHeight), Vector2.right, RayLength, GroundMask)
+            ||Physics2D.Raycast(transform.position + new Vector3(-RayLength/2,RayHeight), Vector2.right, RayLength, ObjectMask);
         
         playerAnimation.SetMove(xDirection);
         playerAnimation.SetIsGrounded(isGrounded);

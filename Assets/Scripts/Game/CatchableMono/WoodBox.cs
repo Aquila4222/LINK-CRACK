@@ -28,7 +28,7 @@ public class WoodBox : CatchableMono
         {
             for (int i = 0; i < 20; i++)
             {
-                ParticleVEPool.Instance.Play(transform.position,0.6f*Random.Range(1,1.5f),10*Random.Range(0,1f),Random.onUnitSphere.normalized,new Vector3(0.2f,0.2f,1),new Vector3(1,1,1),ObjectColor);
+                PhysicalVEPool.Instance.Play(transform.position,Random.Range(1f,3f),Random.onUnitSphere.normalized*Random.Range(20f,30f),Vector3.one*0.4f,ObjectColor);
             }
             GameObject.Destroy(gameObject);
         }
@@ -49,7 +49,7 @@ public class WoodBox : CatchableMono
         CameraControl.Instance.Shock(contact.point);
         for (int i = 0; i < 10; i++)
         {
-            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.white);
+            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.white,true);
         }
         for (int i = 0; i < 5; i++)
         {

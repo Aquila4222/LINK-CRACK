@@ -6,20 +6,31 @@ public class ParticleVE : MonoBehaviour
 {
     private SpriteRenderer sr;
     
+    private Rigidbody2D rb;
+    
   
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Play(Vector3 pos,float duration, float speed,Vector2 direction,Vector3 startScale,Vector3 endScale,Color color)
+    public void Play(Vector3 pos,float duration, float speed,Vector2 direction,Vector3 startScale,Vector3 endScale,Color color,bool dofall)
     {
-        StartCoroutine(PlayEffect(pos, duration, speed, direction, startScale, endScale, color));
+        StartCoroutine(PlayEffect(pos, duration, speed, direction, startScale, endScale, color,dofall));
     }
     
-    IEnumerator PlayEffect(Vector3 pos,float duration, float speed,Vector2 direction,Vector3 startScale,Vector3 endScale,Color color)
+    IEnumerator PlayEffect(Vector3 pos,float duration, float speed,Vector2 direction,Vector3 startScale,Vector3 endScale,Color color,bool dofall)
     {
+        if (dofall)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
         transform.position = pos;
         transform.localScale = startScale;
         transform.up = direction;

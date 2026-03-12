@@ -1159,6 +1159,9 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 64
+  ObjectMask:
+    serializedVersion: 2
+    m_Bits: 1024
   RayHeight: -0.56
   RayLength: 0.99
   JumpForce: 20
