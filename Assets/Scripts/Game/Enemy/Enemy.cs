@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 enum EnemyStateType
@@ -12,7 +13,7 @@ enum EnemyStateType
     Dead,
 }
 
-public class Enemy : CatchableMono
+public class Enemy : CatchableMono,IHurt
 {
     protected float Health { get; set; }
 
@@ -69,6 +70,7 @@ public class Enemy : CatchableMono
         else if (canHurtOther && Health > 0)
         {
             currentState = EnemyStateType.OnFroze;
+            rb.velocity = new Vector2(0,rb.velocity.y);
             rb.freezeRotation = true;
         }
         else if (Health <= 0)
@@ -88,7 +90,7 @@ public class Enemy : CatchableMono
     /// </summary>
     private void OnFroze()
     {
-        rb.velocity = new Vector2(0,rb.velocity.y);
+        
         
         //状态转换
         if (!canHurtOther && Health > 0 && DetectOnGround())
@@ -102,6 +104,11 @@ public class Enemy : CatchableMono
         }
     }
 
+    private void OnDead()
+    {
+        
+    }
+
     /// <summary>
     /// 地面检测
     /// </summary>
@@ -111,4 +118,12 @@ public class Enemy : CatchableMono
         bool onGround = Physics2D.Linecast(transform.position +  detectStartOffsetDistance, transform.position + detectEndOffsetDistance,whatIsGround);
         return onGround;
     }
+
+    public void Hurt(Vector2 repulseForce, float damage = 1)
+    {
+        Health -= damage;
+        rb.AddForce(repulseForce, ForceMode2D.Impulse);
+    }
 }
+
+

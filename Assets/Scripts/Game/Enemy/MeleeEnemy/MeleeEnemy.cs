@@ -16,6 +16,7 @@ public class MeleeEnemy : Enemy
 {
     //状态机
     private FSM<MeleeStateType,MeleeEnemy> meleeFSM;
+    [SerializeField] private bool drawLine;
 
     [Header("角色参数")]
     [SerializeField] public Vector3 facingDirection;
@@ -249,6 +250,9 @@ public class MeleeEnemy : Enemy
 
     private void OnDrawGizmos()
     {
+        if(!drawLine)
+            return;
+        
         // 绘制检测半径（半透明，表示范围）
         Gizmos.color = new Color(0, 1, 0, 0.3f); // 半透明绿
         Gizmos.DrawWireSphere(transform.position, detectRadius);
