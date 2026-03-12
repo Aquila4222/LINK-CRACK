@@ -23,7 +23,8 @@ public class MeleeChase : IState<MeleeStateType,MeleeEnemy>
     {
         if (math.abs(Context.transform.position.x - Context.targetTransform.position.x) > 0.3)
         {
-            Context.transform.localScale= new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
+            Context.facingDirection = new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
+            
             Context.Move(chaseSpeed,Context.targetTransform.position.x > Context.transform.position.x  ? Vector2.right : Vector2.left);
         }
         else

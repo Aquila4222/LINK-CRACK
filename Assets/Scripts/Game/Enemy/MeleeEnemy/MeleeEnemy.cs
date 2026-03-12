@@ -41,7 +41,6 @@ public class MeleeEnemy : Enemy
     [SerializeField] private float fallDetectionDistance;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private LayerMask whatIsObstruction;
-    [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
     [SerializeField] public bool onGroundForJump;
@@ -55,15 +54,18 @@ public class MeleeEnemy : Enemy
     [SerializeField] public float chaseSpeed;
     
     [Header("攻击状态参数")]
-    [SerializeField] public float maxAccumulateTime;
     [SerializeField] public float attackMaxTime;
     [SerializeField] public float attackStartMinTime;
     [SerializeField] public int attackState;
-    [SerializeField] public Vector3 spikeOffsetDistance;
-    [SerializeField] public float spikeMaxTime;
     [SerializeField] public Transform animationTransform;
+    
+    [Header("攻击状态参数改动区")]
+    [SerializeField] public float spikeMaxTime;
+    [SerializeField] public Vector3 spikeOffsetDistance;
+    [SerializeField] public float maxAccumulateTime;
     [SerializeField] public float damageStartTime;
     [SerializeField] public float damageContinueTime;
+    [SerializeField] public Vector3 spikeForce;
 
     public void Initialized()
     {
@@ -84,6 +86,12 @@ public class MeleeEnemy : Enemy
 
     }
 
+    protected new void Awake()
+    {
+        base.Awake();
+        Initialized();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +102,11 @@ public class MeleeEnemy : Enemy
     protected void Update()
     {
         base.Update();
+        
+    }
+
+    protected override void Alive()
+    {
         meleeState = meleeFSM.CurrentEnumState;
 
         facingDirection = transform.localScale;
@@ -202,7 +215,7 @@ public class MeleeEnemy : Enemy
                 {
                     meleeFSM.SwitchState(MeleeStateType.Patrolling);
                 }
-                else if (lockedPlayer && !canAttack && !sightObstructed &&!onAttack)
+                else if (lockedPlayer && !canAttack &&!onAttack)
                 {
                     meleeFSM.SwitchState(MeleeStateType.Chasing);
                 }

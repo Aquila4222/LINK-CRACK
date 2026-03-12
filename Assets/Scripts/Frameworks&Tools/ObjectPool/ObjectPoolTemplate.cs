@@ -108,6 +108,10 @@ public abstract class ObjectPoolTemplate<T> :MonoSingletonHungry<T> where T : Ob
     /// <param name="obj">归还对象</param>
     public void ReturnObject(GameObject obj)
     {
+        if (_objectPool.Contains(obj))
+        {
+            return;
+        }
         if (_objectPool.Count < poolSize)
         {
             obj.SetActive(false);

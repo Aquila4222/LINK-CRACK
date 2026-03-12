@@ -8,7 +8,7 @@ enum EnemyStateType
     UnGenerated,
     WarmUp,
     Alive,
-    OnCaught,
+    OnFroze,
     Dead,
 }
 
@@ -16,18 +16,35 @@ public class Enemy : CatchableMono
 {
     protected float Health { get; set; }
 
-    [SerializeField] private EnemyStateType currentState;
-    [SerializeField] private Vector3 detectStartOffsetDistance;
-    [SerializeField] private Vector3  detectEndOffsetDistance;
+     private EnemyStateType currentState;
+     private Vector3 detectStartOffsetDistance;
+     private Vector3  detectEndOffsetDistance;
+     protected LayerMask whatIsGround;
 
-    protected void Update()
+     private void Initialized()
+     {
+         currentState = EnemyStateType.Alive;
+         detectEndOffsetDistance = new Vector3(-0.5f, -0.53f, 0);
+         detectStartOffsetDistance = new Vector3(0.5f, -0.53f, 0);
+         whatIsGround = LayerMask.GetMask("Ground");
+         Health = 100;
+     }
+     
+     protected void Awake()
+     {
+         Initialized();
+     }
+
+     protected void Update()
     {
         base.Update();
         switch (currentState)
         {
             case EnemyStateType.Alive:
+                OnAlive();
                 break;
-            case EnemyStateType.OnCaught:
+            case EnemyStateType.OnFroze:
+                OnFroze();
                 break;
             case EnemyStateType.Dead:
                 break;
@@ -41,31 +58,43 @@ public class Enemy : CatchableMono
     /// </summary>
     private void OnAlive()
     {
-        rb.freezeRotation = false;
-        
+        Alive();
         
         //状态转换
-        if (canHurtOther && Health > 0)
+        if (!DetectOnGround())
         {
-            currentState = EnemyStateType.OnCaught;
+            currentState = EnemyStateType.OnFroze;
+            rb.freezeRotation = true;
+        }
+        else if (canHurtOther && Health > 0)
+        {
+            currentState = EnemyStateType.OnFroze;
+            rb.freezeRotation = true;
         }
         else if (Health <= 0)
         {
             currentState = EnemyStateType.Dead;
         }
+        
+    }
+
+    protected virtual void Alive()
+    {
         
     }
     
     /// <summary>
     ///被抓住
     /// </summary>
-    private void OnCaught()
+    private void OnFroze()
     {
+        rb.velocity = new Vector2(0,rb.velocity.y);
         
         //状态转换
-        if (!canHurtOther && Health > 0)
+        if (!canHurtOther && Health > 0 && DetectOnGround())
         {
             currentState = EnemyStateType.Alive;
+            rb.freezeRotation = false;
         }
         else if (Health <= 0)
         {
@@ -73,5 +102,13 @@ public class Enemy : CatchableMono
         }
     }
 
-
+    /// <summary>
+    /// 地面检测
+    /// </summary>
+    /// <returns></returns>
+    private bool DetectOnGround()
+    {
+        bool onGround = Physics2D.Linecast(transform.position +  detectStartOffsetDistance, transform.position + detectEndOffsetDistance,whatIsGround);
+        return onGround;
+    }
 }

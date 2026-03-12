@@ -30,6 +30,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     private float spikeMaxTime;
     private float spikeTime;
     private Transform animationTransform;
+    private Vector3 spikeForce;
     
     //状态转换条件
     private bool spikeForward;
@@ -52,6 +53,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         animationTransform = Context.animationTransform;
         damageMaxStartTime = Context.damageStartTime;
         damageMaxContinueTime = Context.damageContinueTime;
+        spikeForce = Context.spikeForce;
     }
 
     public void OnState()
@@ -120,6 +122,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             spikeTime = spikeMaxTime;
             damageStartTime = damageMaxStartTime;
             damageContinueTime = damageMaxContinueTime;
+            Context.transform.localScale= new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
         }
     }
 
@@ -130,20 +133,8 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     {
         Context.onAttack = true;
         
-        //TODO:冲刺逻辑待优化
-        /*if (spikeForward)
-        {
-            Context.transform.localScale= new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
-            Context.rigidBody.AddForce(spikeForce * Context.facingDirection, ForceMode2D.Impulse);
-            spikeForward = false;
-        }
-        else if(Context.onGroundForJump)
-        {
-            Context.Move(0,Context.facingDirection);
-            attackState = MeleeAttackState.Idle;
-            
-        }*/
 
+        //冲刺动画区
         if (spikeTime > spikeMaxTime / 2)
         {
             spikeTime -= Time.deltaTime;
@@ -156,12 +147,18 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
             animationTransform.localScale = Context.transform.localScale;
         }
+        //改动动画注释掉上述代码换位下述代码即可
+        /*if (spikeTime > 0)
+        {
+            spikeTime -= Time.deltaTime;
+        }*/
         else
         {
             animationTransform.position = Context.transform.position;
             attackState = MeleeAttackState.Idle;
         }
 
+        //伤害判定区
         if (damageStartTime > 0)
         {
             damageStartTime -= Time.deltaTime;
