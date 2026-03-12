@@ -63,14 +63,6 @@ public class EnemyAnimation : MonoBehaviour
 
     void Update()
     {
-        if (Move == 1)
-        {
-            transform.right = new Vector3(1, 0, 0);
-        }
-        else if (Move == -1)
-        {
-            transform.right = new Vector3(-1, 0, 0);
-        }
 
         if (state is AnimationState.Idle or AnimationState.Walking)
         {
