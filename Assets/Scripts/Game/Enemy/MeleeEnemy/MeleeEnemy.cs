@@ -56,8 +56,6 @@ public class MeleeEnemy : Enemy
     
     [Header("攻击状态参数")]
     [SerializeField] public float maxAccumulateTime;
-    [SerializeField] public Vector2 spikeDirection;
-    [SerializeField] public float attackProbability;
     [SerializeField] public float attackMaxTime;
     [SerializeField] public float attackStartMinTime;
     [SerializeField] public int attackState;

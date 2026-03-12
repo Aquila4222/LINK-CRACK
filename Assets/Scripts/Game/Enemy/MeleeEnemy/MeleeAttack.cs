@@ -18,11 +18,13 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     //行为参数
     private float maxAccumulateTime;
     private float AccumulateTime;
-    private float attackProbability;
     private float attackMaxTime;
     private float attackStartTime;
     private float attackStartMinTime;
-    private Vector2 spikeForce;
+    private float damageMaxStartTime;
+    private float damageStartTime;
+    private float damageMaxContinueTime;
+    private float damageContinueTime;
 
     private Vector3 spikeOffsetDistance;
     private float spikeMaxTime;
@@ -42,14 +44,14 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         attackState = MeleeAttackState.Idle;
         maxAccumulateTime = Context.maxAccumulateTime;
         spikeForward = false;
-        spikeForce = Context.spikeDirection;
-        attackProbability = Context.attackProbability;
         attackMaxTime = Context.attackMaxTime;
         attackStartTime = attackMaxTime;
         
         spikeOffsetDistance = Context.spikeOffsetDistance;
         spikeMaxTime = Context.spikeMaxTime;
         animationTransform = Context.animationTransform;
+        damageMaxStartTime = Context.damageStartTime;
+        damageMaxContinueTime = Context.damageContinueTime;
     }
 
     public void OnState()
@@ -116,6 +118,8 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             spikeForward = true;
             
             spikeTime = spikeMaxTime;
+            damageStartTime = damageMaxStartTime;
+            damageContinueTime = damageMaxContinueTime;
         }
     }
 
@@ -145,19 +149,28 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             spikeTime -= Time.deltaTime;
             animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
             animationTransform.localScale = new Vector3(Context.transform.localScale.x * -1, Context.transform.localScale.y, Context.transform.localScale.z);
-            Context.Attack();
         }
         else if (spikeTime <= spikeMaxTime && spikeTime > 0)
         {
             spikeTime -= Time.deltaTime;
             animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
             animationTransform.localScale = Context.transform.localScale;
-            Context.Attack();
         }
         else
         {
             animationTransform.position = Context.transform.position;
             attackState = MeleeAttackState.Idle;
         }
+
+        if (damageStartTime > 0)
+        {
+            damageStartTime -= Time.deltaTime;
+        }
+        else if(damageContinueTime > 0)
+        {
+            damageContinueTime -= Time.deltaTime;
+            Context.Attack();
+        }
+        
     }
 }
