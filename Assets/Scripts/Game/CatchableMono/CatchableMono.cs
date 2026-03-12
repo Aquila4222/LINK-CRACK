@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CatchableMono : MonoBehaviour
 {
-    private const float CrashSpeed = 30f;
+    private const float CrashSpeed = 20f;
     
     public Rigidbody2D rb
     {
@@ -26,8 +26,11 @@ public class CatchableMono : MonoBehaviour
     private Rigidbody2D _rb;
 
     protected bool isChained;
+    protected bool canHurtOther;
+    
+    private float hurtTimer;
 
-    private Vector2 maxSpeed;
+    public Vector2 maxSpeed;
     private float timer;
     private bool isRising;
 
@@ -60,7 +63,28 @@ public class CatchableMono : MonoBehaviour
             }
         }
     }
-    
+
+    void Update()
+    {
+        if (isChained)
+        {
+            canHurtOther = true;
+            hurtTimer = 0.5f;
+        }
+        else
+        {
+            if (hurtTimer > 0)
+            {
+                hurtTimer -= Time.deltaTime;
+                canHurtOther = true;
+            }
+            else
+            {
+                canHurtOther = false;
+            }
+        }
+        
+    }
     
     public void Chain()
     {
@@ -74,12 +98,29 @@ public class CatchableMono : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (canHurtOther == true)
         {
-            Vector2 normal = collision.contacts[0].normal;
-            if (Vector2.Dot(maxSpeed,-normal) > CrashSpeed && isChained)
+            CatchableMono c = collision.gameObject.GetComponent<CatchableMono>();
+            if (c || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
-                OnCrash();
+                Vector2 normal = collision.contacts[0].normal;
+                if (Vector2.Dot(maxSpeed,-normal) > CrashSpeed && canHurtOther)
+                {
+                    OnCrash();
+                }
+            }
+        }
+
+        if (canHurtOther == false)
+        {
+            CatchableMono c = collision.gameObject.GetComponent<CatchableMono>();
+            if (c)
+            {
+                Vector2 normal = collision.contacts[0].normal;
+                if (Vector2.Dot(c.maxSpeed,normal) > CrashSpeed && c.canHurtOther)
+                {
+                    OnCrash();
+                }
             }
         }
     }

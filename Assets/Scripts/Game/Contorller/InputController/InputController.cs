@@ -10,6 +10,10 @@ public class InputController : MonoSingletonHungry<InputController>
     /// 移动向量
     /// </summary>
     public Vector2 MoveInput => _moveInput;
+    
+    public Vector2 AimInput => _aimInput;
+
+    public bool isLinking => _playerControls.Gameplay.Link.IsPressed();
 
     /// <summary>
     /// 注册跳跃
@@ -46,6 +50,17 @@ public class InputController : MonoSingletonHungry<InputController>
     {
         switchLinkAction += a;
     }
+
+    public int GetScheme()
+    {
+        if (_playerInput.currentControlScheme == "Keyboard&Mouse")
+            return 0;
+        else if (_playerInput.currentControlScheme == "Gamepad")
+            return 1;
+        else
+            return -1;
+    }
+    
     
     private Action jumpAction;
     private Action linkAction;
@@ -54,13 +69,22 @@ public class InputController : MonoSingletonHungry<InputController>
     
     // 引用上一步生成的C#类
     private PlayerInputs _playerControls;
+
+    private PlayerInput _playerInput;
     
     private Vector2 _moveInput;
+    
+    private Vector2 _aimInput;
+    
     
     private void Awake()
     {
         // 实例化
         _playerControls = new PlayerInputs();
+
+        _playerInput = gameObject.AddComponent<PlayerInput>();
+
+        _playerInput.actions = Resources.Load<InputActionAsset>("PlayerInputs");
     }
 
     private void OnEnable()
@@ -72,8 +96,7 @@ public class InputController : MonoSingletonHungry<InputController>
         // 当玩家按下跳跃键，这个方法就会被自动调用
         _playerControls.Gameplay.Jump.performed += OnJumpPerformed;
         _playerControls.Gameplay.Link.performed += OnLinkPerformed;
-        _playerControls.Gameplay.Unlink.canceled += OnUnlinkPerformed;
-        _playerControls.Gameplay.SwichLink.performed += OnSwitchLinkPerformed;
+        _playerControls.Gameplay.Link.canceled += OnUnlinkPerformed;
     }
 
     private void OnDisable()
@@ -82,13 +105,14 @@ public class InputController : MonoSingletonHungry<InputController>
         _playerControls.Disable();
         _playerControls.Gameplay.Jump.performed -= OnJumpPerformed;
         _playerControls.Gameplay.Link.performed -= OnLinkPerformed;
-        _playerControls.Gameplay.Unlink.canceled -= OnUnlinkPerformed;
-        _playerControls.Gameplay.SwichLink.performed -= OnSwitchLinkPerformed;
+        _playerControls.Gameplay.Link.canceled -= OnUnlinkPerformed;
     }
 
     private void Update()
     {
         _moveInput = _playerControls.Gameplay.Move.ReadValue<Vector2>();
+        
+        _aimInput = _playerControls.Gameplay.Aim.ReadValue<Vector2>();
     }
     
     

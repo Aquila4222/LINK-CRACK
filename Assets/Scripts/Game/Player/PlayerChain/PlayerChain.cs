@@ -17,15 +17,21 @@ public class PlayerChain : MonoBehaviour
    public CatchableMono chainedMono;
    
    public float Force;
-
-   public float ChainRange;
    
    private bool isChaining = false;
    
    private Camera mainCamera;
 
    private ChainVE chainVE;
+   
+   public Transform AimTransform;
 
+   public float AimDistance;
+   
+   public Vector3 AimPos;
+   
+   public float AimMoveSpeed;
+      
    void Awake()
    {
       InputController.Instance.RegisterLink(ChainInput);
@@ -41,9 +47,8 @@ public class PlayerChain : MonoBehaviour
    {
       if (isChaining && chainedMono != null)
       {
-         Vector2 mouseScreenPosition = Input.mousePosition;
-         Vector2 mouseWorldPosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
-         chainedMono.rb.AddForce(((Vector2)mouseWorldPosition - (Vector2)chainedMono.rb.transform.position)*Force);
+        
+         chainedMono.rb.AddForce(((Vector2)AimPos - (Vector2)chainedMono.rb.transform.position)*Force);
          
          Vector3 objToAnchor = transform.position- chainedMono.rb.transform.position;
          float currentDistance = objToAnchor.magnitude;
@@ -69,14 +74,56 @@ public class PlayerChain : MonoBehaviour
             chainedMono.rb.AddForce(pullForce - dampingForce);
          }
          
-         chainVE.SetChain(transform.position,chainedMono.rb.transform.position,mouseWorldPosition);
+         
+         chainVE.SetChain(transform.position,chainedMono.rb.transform.position,AimPos);
+         
+         if ((chainedMono.transform.position - transform.position).magnitude > maxRopeLength * 1.5f)
+         {
+            UnChain();
+         }
       }
       else
       {
          chainVE.DisableAll();
       }
    }
-   
+
+   void Update()
+   {
+      if (InputController.Instance.GetScheme() == 0)
+      {
+         AimTransform.gameObject.SetActive(true);
+         Vector2 mouseScreenPosition = Input.mousePosition;
+         Vector2 mouseWorldPosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
+         if ((mouseWorldPosition - (Vector2)transform.position).magnitude < AimDistance)
+         {
+            AimTransform.position = mouseWorldPosition;
+            AimPos = AimTransform.position;
+         }
+         else
+         {
+            AimTransform.position = (mouseWorldPosition - (Vector2)transform.position).normalized*AimDistance + (Vector2)transform.position;
+            AimPos = AimTransform.position;
+         }
+      }
+      else if (InputController.Instance.GetScheme() == 1)
+      {
+         if (InputController.Instance.AimInput != Vector2.zero)
+         {
+            AimTransform.gameObject.SetActive(true);
+            Vector3 targetPos = InputController.Instance.AimInput.normalized * AimDistance;
+            AimTransform.localPosition += (targetPos-AimTransform.localPosition).normalized * (Time.deltaTime * AimMoveSpeed);
+            
+         }
+         else
+         {
+            AimTransform.gameObject.SetActive(false);
+         }
+     
+         AimPos = AimTransform.position;
+      }
+      
+   }
    
    private void UnChain()
    {
@@ -91,9 +138,20 @@ public class PlayerChain : MonoBehaviour
    private void TryChain()
    {
       //test
-      isChaining = true;
-      chainedMono = testMono;
-      chainedMono.Chain();
+      Collider2D[] hits =  Physics2D.OverlapCircleAll(AimPos,1);
+      isChaining = false;
+      chainedMono = null;
+      foreach (Collider2D hit in hits)
+      {
+         CatchableMono c =  hit.GetComponent<CatchableMono>();
+         if (c)
+         {
+            isChaining = true;
+            chainedMono = c;
+            chainedMono.Chain();
+            break;
+         }
+      }
    }
    
    private void UnChainInput()

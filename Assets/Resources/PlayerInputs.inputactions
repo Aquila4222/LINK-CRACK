@@ -34,15 +34,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Unlink",
-                    "type": "Button",
-                    "id": "87fc646a-d88c-40b4-8572-d724887d3e3f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "SwichLink",
                     "type": "Button",
                     "id": "8bc612ad-01b1-42b6-abd4-501892dee181",
@@ -50,6 +41,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Aim",
+                    "type": "Value",
+                    "id": "77af8334-1e29-4cda-83d5-bf22a4586e44",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -154,12 +154,12 @@
                 },
                 {
                     "name": "",
-                    "id": "fe2f465c-67e4-4ae8-a80b-cb44ee96fb50",
-                    "path": "<Mouse>/leftButton",
+                    "id": "80b7d148-a65c-4381-9009-985c3ca14430",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Unlink",
+                    "action": "Link",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -171,6 +171,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwichLink",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a7c7b8e-57b9-4300-b60a-0411b08a996c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -205,5 +216,33 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard&Mouse",
+            "bindingGroup": "Keyboard&Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
