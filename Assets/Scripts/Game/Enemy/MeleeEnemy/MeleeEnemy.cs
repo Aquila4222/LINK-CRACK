@@ -26,9 +26,11 @@ public class MeleeEnemy : Enemy
 
     public delegate void Accumulate();
     public delegate void Spike();
+    public delegate void SpikeEnd();
     
     public event Accumulate StartAccumulate;
     public event Spike StartSpike;
+    public event SpikeEnd OnSpikeEnd;
 
     public void InvokeAccumulate()
     {
@@ -39,6 +41,11 @@ public class MeleeEnemy : Enemy
     {
         StartSpike?.Invoke();
     }
+
+    public void InvokeSpikeEnd()
+    {
+        OnSpikeEnd?.Invoke();
+    }
     
     
     [Header("状态转换条件")]
@@ -48,8 +55,10 @@ public class MeleeEnemy : Enemy
     [SerializeField] private bool sightObstructed;
     [SerializeField] private bool canAttack;
     [SerializeField] public bool onAttack;
-    
+
     [Header("检测参数")]
+    [SerializeField] private Collider2D enemyCollider;
+    [SerializeField] private Collider2D hurtCollider;
     [SerializeField] private Collider2D[] detectedColliders;
     [SerializeField] private Collider2D[] attackColliders;
     [SerializeField] private float detectRadius;
@@ -60,6 +69,7 @@ public class MeleeEnemy : Enemy
     [SerializeField] private Vector3 fallDetectionOffsetDistance;
     [SerializeField] private float fallDetectionDistance;
     [SerializeField] private LayerMask whatIsPlayer;
+    [SerializeField] private LayerMask whatIsCanHurt;
     [SerializeField] private LayerMask whatIsObstruction;
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
@@ -85,14 +95,16 @@ public class MeleeEnemy : Enemy
     [SerializeField] public float maxAccumulateTime;
     [SerializeField] public float damageStartTime;
     [SerializeField] public float damageContinueTime;
-    [SerializeField] public Vector3 spikeForce;
+    [SerializeField] public float spikeSpeed;
+    [SerializeField] public float reboundForce;
 
     public void Initialized()
     {
+        enemyCollider = gameObject.GetComponent<Collider2D>();
         facingDirection = new Vector2(transform.localScale.x, 0);
         rigidBody = GetComponent<Rigidbody2D>();
         detectedColliders = new Collider2D[1];
-        attackColliders = new Collider2D[1];
+        attackColliders = new Collider2D[10];
         
         //状态机初始化
         MeleePatrol meleePatrol = new(this);
@@ -122,6 +134,7 @@ public class MeleeEnemy : Enemy
     protected void Update()
     {
         base.Update();
+        
         
         enemyAnimation.SetIsGrounded(onGroundForJump);
         if (currentState == EnemyStateType.OnFroze || rb.velocity.x == 0)
@@ -153,14 +166,24 @@ public class MeleeEnemy : Enemy
     /// <summary>
     /// 攻击
     /// </summary>
-    public void Attack()
+    public Collider2D Attack()
     {
         //受击调用
-        int attackNum = Physics2D.OverlapBoxNonAlloc(transform.position + spikeOffsetDistance * facingDirection.x / 2,attackSize + spikeOffsetDistance,0,attackColliders,whatIsPlayer);
-        if (attackNum > 0)
+        int attackNum = Physics2D.OverlapBoxNonAlloc(transform.position ,attackSize,0,attackColliders,whatIsCanHurt);
+        if (attackNum > 1)
         {
-            attackColliders[0].gameObject.GetComponent<IHurt>().Hurt(Vector2.zero);
+            foreach (var canHurt in attackColliders)
+            {
+                if (canHurt != enemyCollider)
+                {
+                    //canHurt.gameObject.GetComponent<IHurt>().Hurt(Vector2.zero);
+                    hurtCollider = canHurt;
+                    return canHurt;
+                }
+            }
         }
+        
+        return null;
     }
     
     /// <summary>
@@ -263,11 +286,11 @@ public class MeleeEnemy : Enemy
         switch (meleeFSM.CurrentEnumState)
         {
             case MeleeStateType.Attacking:
-                if (!lockedPlayer && !inSight && !onAttack)
+                if (!lockedPlayer && !inSight && !onAttack && !onSpike)
                 {
                     meleeFSM.SwitchState(MeleeStateType.Patrolling);
                 }
-                else if (lockedPlayer && !canAttack &&!onAttack)
+                else if (lockedPlayer && !canAttack &&!onAttack && !onSpike)
                 {
                     meleeFSM.SwitchState(MeleeStateType.Chasing);
                 }

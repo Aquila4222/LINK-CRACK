@@ -15,12 +15,13 @@ public enum EnemyStateType
 
 public class Enemy : CatchableMono,IHurt
 {
-    protected float Health { get; set; }
+     protected float Health { get; set; }
 
      protected EnemyStateType currentState;
      private Vector3 detectStartOffsetDistance;
      private Vector3  detectEndOffsetDistance;
      protected LayerMask whatIsGround;
+     public bool onSpike;
 
      private void Initialized()
      {
@@ -65,12 +66,12 @@ public class Enemy : CatchableMono,IHurt
         Alive();
         
         //状态转换
-        if (!DetectOnGround())
+        if (!DetectOnGround() && !onSpike)
         {
             currentState = EnemyStateType.OnFroze;
             rb.freezeRotation = false;
         }
-        else if (canHurtOther && Health > 0)
+        else if (canHurtOther && Health > 0 && !onSpike)
         {
             currentState = EnemyStateType.OnFroze;
             rb.velocity = new Vector2(0,rb.velocity.y);
@@ -116,7 +117,7 @@ public class Enemy : CatchableMono,IHurt
     /// 地面检测
     /// </summary>
     /// <returns></returns>
-    private bool DetectOnGround()
+    public bool DetectOnGround()
     {
         bool onGround = Physics2D.Linecast(transform.position +  detectStartOffsetDistance, transform.position + detectEndOffsetDistance,whatIsGround);
         return onGround;

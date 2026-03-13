@@ -30,7 +30,10 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     private float spikeMaxTime;
     private float spikeTime;
     private Transform animationTransform;
-    private Vector3 spikeForce;
+    private float spikeSpeed;
+    private float reboundForce;
+    private Vector3 targetLockDirection;
+    private bool hitAnObject;
     
     //状态转换条件
     private bool spikeForward;
@@ -53,7 +56,8 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         animationTransform = Context.animationTransform;
         damageMaxStartTime = Context.damageStartTime;
         damageMaxContinueTime = Context.damageContinueTime;
-        spikeForce = Context.spikeForce;
+        spikeSpeed = Context.spikeSpeed;
+        reboundForce = Context.reboundForce;
     }
 
     public void OnState()
@@ -128,6 +132,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             damageStartTime = damageMaxStartTime;
             damageContinueTime = damageMaxContinueTime;
             Context.transform.localScale= new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
+            targetLockDirection = (Context.targetTransform.position - Context.transform.position).normalized;
         }
     }
 
@@ -138,43 +143,51 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     {
         Context.onAttack = true;
         
-        if (Mathf.Approximately(spikeTime, spikeMaxTime))
+        if (spikeForward)
         {
             Context.InvokeSpike();
-        }
-        
-        //冲刺动画区
-        if (spikeTime > spikeMaxTime / 2)
-        {
-            spikeTime -= Time.deltaTime;
-            animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
-        }
-        else if (spikeTime <= spikeMaxTime && spikeTime > 0)
-        {
-            spikeTime -= Time.deltaTime;
-            animationTransform.position = Context.transform.position + spikeOffsetDistance * (spikeMaxTime / 2 - math.abs(spikeTime - spikeMaxTime / 2)) / spikeMaxTime * 2 * Context.facingDirection.x;
-        }
-        //改动动画注释掉上述代码换位下述代码即可
-        /*if (spikeTime > 0)
-        {
-            spikeTime -= Time.deltaTime;
-        }*/
-        else
-        {
-            animationTransform.position = Context.transform.position;
-            attackState = MeleeAttackState.Idle;
+            spikeForward = false;
+            Context.onSpike = true;
         }
 
-        //伤害判定区
-        if (damageStartTime > 0)
+        if (spikeTime > 0)
         {
-            damageStartTime -= Time.deltaTime;
+            spikeTime -= Time.deltaTime;
+            Spike();
         }
-        else if(damageContinueTime > 0)
+        else if(!hitAnObject && Context.DetectOnGround())
         {
-            damageContinueTime -= Time.deltaTime;
-            Context.Attack();
+            attackState = MeleeAttackState.Idle;
+            Context.onSpike = false;
         }
         
+    }
+    
+    private void Spike()
+    {
+        Collider2D attackCollider = null;
+        //突刺
+        if (!hitAnObject)
+        {
+            Context.rigidBody.velocity = targetLockDirection *  spikeSpeed;
+            attackCollider = Context.Attack();
+        }
+
+        
+        //撞到物体回弹并回复状态
+         
+        if (attackCollider != null && !hitAnObject)
+        {
+            Context.InvokeSpikeEnd();
+            Context.rigidBody.AddForce((Context.transform.position - attackCollider.transform.position).normalized * reboundForce, ForceMode2D.Impulse);
+            hitAnObject = true;
+        }
+
+        if (hitAnObject && Context.DetectOnGround())
+        {
+            attackState = MeleeAttackState.Idle;
+            hitAnObject = false;
+            Context.onSpike =  false;
+        }
     }
 }

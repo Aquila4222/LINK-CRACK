@@ -274,7 +274,7 @@ Transform:
   m_GameObject: {fileID: 319660640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -54.29, y: -2.99, z: 0}
+  m_LocalPosition: {x: 7.11, y: -0.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -306,7 +306,7 @@ Transform:
   m_GameObject: {fileID: 368527802}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.97, y: -0.23, z: 0}
+  m_LocalPosition: {x: -4.21, y: 10.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -806,7 +806,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1726873233}
-  - component: {fileID: 1726873234}
   - component: {fileID: 1726873236}
   - component: {fileID: 1726873235}
   m_Layer: 0
@@ -832,40 +831,6 @@ Transform:
   - {fileID: 368527803}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1726873234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726873231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c76fe547172b04496a3db5e9127df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canHurtOther: 0
-  maxSpeed: {x: 0, y: 0}
-  currentRemoteState: 0
-  facingDirection: {x: 0, y: 0, z: 0}
-  targetTransform: {fileID: 0}
-  targetColliders: []
-  alertRadius: 5
-  whatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 0
-  whatIsObstruction:
-    serializedVersion: 2
-    m_Bits: 0
-  lockTarget: 0
-  insight: 0
-  sightObstructed: 0
-  canChase: 0
-  maxLockTime: 0
-  lockTime: 0
-  chaseSpeed: 0
-  accumulateMaxTime: 0
-  maxAfterAttackShakeTime: 0
 --- !u!50 &1726873235
 Rigidbody2D:
   serializedVersion: 4
@@ -946,6 +911,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: drawLine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: spikeSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: attackRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: attackSize.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: attackSize.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: detectRadius
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: reboundForce
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: spikeMaxTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: maxAccumulateTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: attackStartMinTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: whatIsCanHurt.m_Bits
+      value: 1408
+      objectReference: {fileID: 0}
     - target: {fileID: 2363806901811200222, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
