@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +41,13 @@ public class PlayerChain : MonoBehaviour
       mainCamera = Camera.main;
       
       chainVE =  GetComponentInChildren<ChainVE>();
+   }
+
+   private void OnDestroy()
+   {
+      InputController.Instance.UnRegisterLink(ChainInput);
+      InputController.Instance.UnRegisterUnlink(UnChainInput);
+      InputController.Instance.UnRegisterLinkSwitch(SwitchChainInput);
    }
 
    void FixedUpdate()

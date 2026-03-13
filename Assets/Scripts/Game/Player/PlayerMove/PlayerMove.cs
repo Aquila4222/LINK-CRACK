@@ -28,11 +28,12 @@ public class PlayerMove : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponentInChildren<PlayerAnimation>();
+        InputController.Instance.RegisterJump(Jump);
     }
 
-    void Start()
+    private void OnDestroy()
     {
-        InputController.Instance.RegisterJump(Jump);
+        InputController.Instance.UnRegisterJump(Jump);
     }
 
 

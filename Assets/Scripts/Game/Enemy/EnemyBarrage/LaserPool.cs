@@ -23,9 +23,9 @@ public class LaserPool : ObjectPoolTemplate<LaserPool>
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             Vector2 mouseScreenPosition = Input.mousePosition;
             Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
