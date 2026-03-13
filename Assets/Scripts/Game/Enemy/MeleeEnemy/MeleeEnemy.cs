@@ -21,6 +21,25 @@ public class MeleeEnemy : Enemy
     [Header("角色参数")]
     [SerializeField] public Vector3 facingDirection;
     [SerializeField] public Rigidbody2D rigidBody;
+    [SerializeField] private EnemyAnimation enemyAnimation;
+    [SerializeField] private SpriteRenderer enemySpriteRenderer;
+
+    public delegate void Accumulate();
+    public delegate void Spike();
+    
+    public event Accumulate StartAccumulate;
+    public event Spike StartSpike;
+
+    public void InvokeAccumulate()
+    {
+        StartAccumulate?.Invoke();
+    }
+
+    public void InvokeSpike()
+    {
+        StartSpike?.Invoke();
+    }
+    
     
     [Header("状态转换条件")]
     [SerializeField] public Transform targetTransform;
@@ -104,6 +123,11 @@ public class MeleeEnemy : Enemy
     {
         base.Update();
         
+        enemyAnimation.SetIsGrounded(onGroundForJump);
+        if (currentState == EnemyStateType.OnFroze || rb.velocity.x == 0)
+        {
+            enemyAnimation.SetMove(0);
+        }
     }
 
     protected override void Alive()
@@ -115,6 +139,15 @@ public class MeleeEnemy : Enemy
         Detect();
         JudgeState();
         meleeFSM.OnState();
+        
+        if (rigidBody.velocity.x > 0)
+        {
+            enemyAnimation.SetMove(1);
+        }
+        else if (rigidBody.velocity.x < 0)
+        {
+            enemyAnimation.SetMove(-1);
+        }
     }
 
     /// <summary>
@@ -122,12 +155,11 @@ public class MeleeEnemy : Enemy
     /// </summary>
     public void Attack()
     {
-        //TODO:角色受击调用
+        //受击调用
         int attackNum = Physics2D.OverlapBoxNonAlloc(transform.position + spikeOffsetDistance * facingDirection.x / 2,attackSize + spikeOffsetDistance,0,attackColliders,whatIsPlayer);
         if (attackNum > 0)
         {
-            Debug.Log("Attack Player");
-            //attackColliders[0].gameObject.GetComponent<>()
+            attackColliders[0].gameObject.GetComponent<IHurt>().Hurt(Vector2.zero);
         }
     }
     
@@ -146,6 +178,21 @@ public class MeleeEnemy : Enemy
         {
             rigidBody.velocity = Vector2.zero;
         }
+        
+        
+    }
+
+    public override void Hurt(Vector2 repulseForce, float damage = 1)
+    {
+        //base.Hurt(repulseForce, damage);
+        StartCoroutine(HurtEffect(enemySpriteRenderer));
+    }
+    
+    IEnumerator HurtEffect(SpriteRenderer spriteRenderer)
+    {
+        spriteRenderer.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.enabled = false;
     }
     
     /// <summary>
@@ -202,7 +249,7 @@ public class MeleeEnemy : Enemy
             }
         }
         
-        //TODO:地面检测(分坠崖检测和跳跃检测两部分）
+        //地面检测(分坠崖检测和跳跃检测两部分）
         onGroundForJump = Physics2D.Linecast(transform.position + jumpDetectionStartOffsetDistance, transform.position + jumpDetectionEndOffsetDistance, whatIsGround);
         onGroundForFalling = Physics2D.Raycast(transform.position + new Vector3(fallDetectionOffsetDistance.x * facingDirection.x,fallDetectionOffsetDistance.y,fallDetectionOffsetDistance.z),Vector2.down,fallDetectionDistance,whatIsGround);
         
@@ -315,4 +362,5 @@ public class MeleeEnemy : Enemy
         Gizmos.color = onGroundForFalling ? Color.red : Color.green;
         Gizmos.DrawLine(fallStart, fallEnd);
     }
+    
 }

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum RemoteBulletState
+public enum RemoteBulletState
 {
     Idle,
-    Alert,
+    Chase,
     Attacking,
     
 }
@@ -14,8 +14,12 @@ public class RemoteBulletEnemy : Enemy
 {
     private FSM<RemoteBulletState, RemoteBulletEnemy> remoteFSM;
     
+    [Header("调试检测参数")]
+    [SerializeField] private RemoteBulletState currentRemoteState;
+    
     [Header("敌人参数")]
-    [SerializeField] private Transform bullletTransform;
+    [SerializeField] private Vector3 facingDirection;
+    
 
     [Header("检测参数")] 
     [SerializeField] private Transform targetTransform;
@@ -23,25 +27,40 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] private float alertRadius;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private LayerMask whatIsObstruction;
-    [SerializeField] private bool lockTarget;
-    [SerializeField] private bool sightObstructed;
-    [SerializeField] private bool canAttack;
+    [SerializeField] public bool lockTarget;
+    [SerializeField] public bool insight;
+    [SerializeField] public bool sightObstructed;
+    [SerializeField] public bool canChase;
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
+
+    [Header("追击状态参数")] 
+    [SerializeField] private float chaseSpeed;
+    
+    [Header("攻击状态参数")]
+    [SerializeField] public float accumulateMaxTime;
+    [SerializeField] public float maxAfterAttackShakeTime;
 
     public void Initialized()
     {
         targetColliders = new Collider2D[1];
+
+        RemoteBulletAttack remoteBulletAttack = new RemoteBulletAttack();
+        RemoteBulletChase remoteBulletChase = new RemoteBulletChase();
+        RemoteBulletIdle remoteBulletIdle = new RemoteBulletIdle();
+        remoteFSM = new FSM<RemoteBulletState, RemoteBulletEnemy>(RemoteBulletState.Idle,remoteBulletIdle);
+        remoteFSM.AddState(RemoteBulletState.Chase,remoteBulletChase);
+        remoteFSM.AddState(RemoteBulletState.Attacking,remoteBulletAttack);
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        Initialized();
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         base.Update();
     }
@@ -51,15 +70,46 @@ public class RemoteBulletEnemy : Enemy
     /// </summary>
     protected override void Alive()
     {
+        base.Alive();
+     
+        currentRemoteState = remoteFSM.CurrentEnumState;
         
+        
+        Detect();
+        remoteFSM.OnState();
     }
 
+    public void Move(float speed, Vector3 direction)
+    {
+        
+    }
+    
+    /// <summary>
+    /// 提供给子状态的状态转换函数
+    /// </summary>
+    /// <param name="state"></param>
+    public void SwitchState(RemoteBulletState state)
+    {
+        remoteFSM.SwitchState(state);
+    }
+    
+    /// <summary>
+    /// 射击弹幕方法
+    /// </summary>
+    /// <param name="bulletPos"></param>
+    /// <param name="bulletSpeed"></param>
+    public void ShootBullet(Vector3 bulletPos, Vector3 bulletSpeed)
+    {
+        //TODO:射击弹幕方法待写
+    }
+    
     /// <summary>
     /// 检测
     /// </summary>
     private void Detect()
     {
         int targetNum = Physics2D.OverlapCircleNonAlloc(transform.position,alertRadius,targetColliders,whatIsPlayer);
+        insight = targetNum > 0;
         if (targetNum > 0)
         {
             lockTarget =  true;
@@ -70,6 +120,10 @@ public class RemoteBulletEnemy : Enemy
         if (lockTarget)
         {
             sightObstructed = Physics2D.Linecast(transform.position, targetTransform.position, whatIsObstruction);
+            if (!sightObstructed)
+            {
+                canChase = true;
+            }
         }
         
         
@@ -80,48 +134,11 @@ public class RemoteBulletEnemy : Enemy
             if (lockTime < 0)
             {
                 lockTarget = false;
+                canChase = false;
                 targetTransform = null;
             }
         }
     }
 
-    private void JudgeState()
-    {
-        switch (remoteFSM.CurrentEnumState)
-        {
-            //TODO:待修改
-            case RemoteBulletState.Idle:
-                if (lockTarget)
-                {
-                    remoteFSM.SwitchState(RemoteBulletState.Alert);
-                }
-                else if (lockTarget && canAttack)
-                {
-                    remoteFSM.SwitchState(RemoteBulletState.Attacking);
-                }
-                break;
-            case RemoteBulletState.Alert:
-                if (canAttack)
-                {
-                    remoteFSM.SwitchState(RemoteBulletState.Attacking);
-                }
-                else if (!lockTarget)
-                {
-                    remoteFSM.SwitchState(RemoteBulletState.Idle);
-                }
-                break;
-            case RemoteBulletState.Attacking:
-                if (lockTarget && !canAttack)
-                {
-                    remoteFSM.SwitchState(RemoteBulletState.Alert);
-                }
-                else if (lockTarget)
-                {
-                    
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    
 }
