@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 enum EnemyStateType
 {
@@ -21,13 +22,15 @@ public class Enemy : CatchableMono,IHurt
      private Vector3 detectStartOffsetDistance;
      private Vector3  detectEndOffsetDistance;
      protected LayerMask whatIsGround;
+     private SpriteRenderer sr;
 
      private void Initialized()
      {
          currentState = EnemyStateType.Alive;
          detectEndOffsetDistance = new Vector3(-0.5f, -0.53f, 0);
          detectStartOffsetDistance = new Vector3(0.5f, -0.53f, 0);
-         whatIsGround = LayerMask.GetMask("Ground");
+         sr = gameObject.GetComponent<SpriteRenderer>();
+         whatIsGround = LayerMask.GetMask("Ground") + LayerMask.GetMask("Object") + LayerMask.GetMask("Player");
          Health = 100;
      }
      
@@ -48,6 +51,7 @@ public class Enemy : CatchableMono,IHurt
                 OnFroze();
                 break;
             case EnemyStateType.Dead:
+                OnDead();
                 break;
             default:
                 break;
@@ -59,6 +63,8 @@ public class Enemy : CatchableMono,IHurt
     /// </summary>
     private void OnAlive()
     {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        
         Alive();
         
         //状态转换
@@ -106,7 +112,7 @@ public class Enemy : CatchableMono,IHurt
 
     private void OnDead()
     {
-        
+        Destroy(this.gameObject);
     }
 
     /// <summary>
@@ -119,10 +125,41 @@ public class Enemy : CatchableMono,IHurt
         return onGround;
     }
 
+    //受伤接口
     public void Hurt(Vector2 repulseForce, float damage = 1)
     {
         Health -= damage;
         rb.AddForce(repulseForce, ForceMode2D.Impulse);
+    }
+
+    
+    
+    /// <summary>
+    /// 碰撞效果
+    /// </summary>
+    /// <param name="contact"></param>
+    protected override void OnCrash(ContactPoint2D contact)
+    {
+        base.OnCrash(contact);
+        RingVEPool.Instance.Play(contact.point,0.15f,Color.white,0.8f,4f);
+        CameraControl.Instance.Shock(contact.point);
+        for (int i = 0; i < 10; i++)
+        {
+            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.red,true);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.right, contact.normal);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.left, contact.normal);
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
+        }
+        
+        
+        Hurt(new Vector2(0,0),1);
     }
 }
 
