@@ -64,6 +64,6 @@ public class Box : CatchableMono
         
         StartCoroutine(HurtEffect());
         Hurt();
-
+        
     }
 }

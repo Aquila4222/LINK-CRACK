@@ -303,6 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
+  drawLine: 1
   facingDirection: {x: 0, y: 0, z: 0}
   rigidBody: {fileID: 0}
   targetTransform: {fileID: 0}
@@ -319,7 +320,7 @@ MonoBehaviour:
   jumpDetectionStartOffsetDistance: {x: -0.5, y: -0.53, z: 0}
   jumpDetectionEndOffsetDistance: {x: 0.5, y: -0.53, z: 0}
   fallDetectionOffsetDistance: {x: 0.5, y: -0.5, z: 0}
-  fallDetectionDistance: 0.2
+  fallDetectionDistance: 3
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 128
@@ -342,7 +343,7 @@ MonoBehaviour:
   spikeMaxTime: 0.2
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
   maxAccumulateTime: 0.5
-  damageStartTime: 2
+  damageStartTime: 0
   damageContinueTime: 1
   spikeForce: {x: 0, y: 0, z: 0}
 --- !u!61 &255073557762492916
