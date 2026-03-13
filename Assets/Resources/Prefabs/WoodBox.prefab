@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6998030489903997681}
   - component: {fileID: 5657753163513459561}
   m_Layer: 10
-  m_Name: Box
+  m_Name: WoodBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
+  MaxBlood: 5
   ObjectColor: {r: 0.41568628, g: 0.34509805, b: 0.21176471, a: 1}
 --- !u!1 &2980210017434710375
 GameObject:

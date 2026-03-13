@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Box : CatchableMono,IHurt
 {
+    public int MaxBlood;
+    
     private SpriteRenderer sr;
 
     private int blood;
@@ -14,7 +16,7 @@ public class Box : CatchableMono,IHurt
     {
         sr = GetComponent<SpriteRenderer>();
         sr.enabled = false;
-        blood = 5;
+        blood = MaxBlood;
     }
 
 

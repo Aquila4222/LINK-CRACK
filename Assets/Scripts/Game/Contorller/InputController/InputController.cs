@@ -23,6 +23,11 @@ public class InputController : MonoSingletonHungry<InputController>
     {
         jumpAction += a;
     }
+
+    public void UnRegisterJump(Action a)
+    {
+        jumpAction -= a;
+    }
     
     /// <summary>
     /// 注册链接
@@ -31,6 +36,11 @@ public class InputController : MonoSingletonHungry<InputController>
     public void RegisterLink(Action a)
     {
         linkAction += a;
+    }
+
+    public void UnRegisterLink(Action a)
+    {
+        linkAction -= a;
     }
     
     /// <summary>
@@ -41,6 +51,11 @@ public class InputController : MonoSingletonHungry<InputController>
     {
         unlinkAction += a;
     }
+
+    public void UnRegisterUnlink(Action a)
+    {
+        unlinkAction -= a;
+    }
     
     /// <summary>
     /// 注册切换链接形态
@@ -49,6 +64,11 @@ public class InputController : MonoSingletonHungry<InputController>
     public void RegisterLinkSwitch(Action a)
     {
         switchLinkAction += a;
+    }
+
+    public void UnRegisterLinkSwitch(Action a)
+    {
+        switchLinkAction -= a;
     }
 
     public int GetScheme()
