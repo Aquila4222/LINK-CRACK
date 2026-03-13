@@ -31,7 +31,7 @@ public class Enemy : CatchableMono,IHurt
          detectStartOffsetDistance = new Vector3(0.5f, -0.53f, 0);
          sr = gameObject.GetComponent<SpriteRenderer>();
          whatIsGround = LayerMask.GetMask("Ground") + LayerMask.GetMask("Object") + LayerMask.GetMask("Player");
-         Health = 3;
+         Health = 100;
      }
      
      protected void Awake()
@@ -132,12 +132,7 @@ public class Enemy : CatchableMono,IHurt
         rb.AddForce(repulseForce, ForceMode2D.Impulse);
     }
 
-    IEnumerator HurtEffect()
-    {
-        sr.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        sr.enabled = false;
-    }
+    
     
     /// <summary>
     /// 碰撞效果
@@ -147,9 +142,10 @@ public class Enemy : CatchableMono,IHurt
     {
         base.OnCrash(contact);
         RingVEPool.Instance.Play(contact.point,0.15f,Color.white,0.8f,4f);
+        CameraControl.Instance.Shock(contact.point);
         for (int i = 0; i < 10; i++)
         {
-            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.white,true);
+            ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.red,true);
         }
         for (int i = 0; i < 5; i++)
         {
