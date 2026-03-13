@@ -306,6 +306,8 @@ MonoBehaviour:
   drawLine: 0
   facingDirection: {x: 0, y: 0, z: 0}
   rigidBody: {fileID: 0}
+  enemyAnimation: {fileID: 4565673112815790921}
+  enemySpriteRenderer: {fileID: 3579982614670187807}
   targetTransform: {fileID: 0}
   lockedPlayer: 0
   inSight: 0
@@ -495,7 +497,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1417456351
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -528,6 +530,8 @@ MonoBehaviour:
   LandingSpeed: 8
   LandingRange: 0.2
   state: 0
+  Move: 0
+  isGrounded: 0
   timer: 0
   direction: 1
 --- !u!1 &4303475101737652148

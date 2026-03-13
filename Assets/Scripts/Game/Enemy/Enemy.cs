@@ -5,9 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-enum EnemyStateType
+public enum EnemyStateType
 {
-    UnGenerated,
     WarmUp,
     Alive,
     OnFroze,
@@ -18,18 +17,16 @@ public class Enemy : CatchableMono,IHurt
 {
     protected float Health { get; set; }
 
-     private EnemyStateType currentState;
+     protected EnemyStateType currentState;
      private Vector3 detectStartOffsetDistance;
      private Vector3  detectEndOffsetDistance;
      protected LayerMask whatIsGround;
-     private SpriteRenderer sr;
 
      private void Initialized()
      {
          currentState = EnemyStateType.Alive;
          detectEndOffsetDistance = new Vector3(-0.5f, -0.53f, 0);
          detectStartOffsetDistance = new Vector3(0.5f, -0.53f, 0);
-         sr = gameObject.GetComponent<SpriteRenderer>();
          whatIsGround = LayerMask.GetMask("Ground") + LayerMask.GetMask("Object") + LayerMask.GetMask("Player");
          Health = 100;
      }
@@ -126,7 +123,7 @@ public class Enemy : CatchableMono,IHurt
     }
 
     //受伤接口
-    public void Hurt(Vector2 repulseForce, float damage = 1)
+    public virtual void Hurt(Vector2 repulseForce, float damage = 1)
     {
         Health -= damage;
         rb.AddForce(repulseForce, ForceMode2D.Impulse);

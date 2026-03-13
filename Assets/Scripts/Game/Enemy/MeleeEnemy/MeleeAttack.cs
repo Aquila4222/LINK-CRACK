@@ -109,6 +109,11 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         Context.onAttack = false;
         
         Context.Move(0,Context.facingDirection);
+        if (Mathf.Approximately(AccumulateTime, maxAccumulateTime))
+        {
+            Context.InvokeAccumulate();
+        }
+        
         if (AccumulateTime > 0)
         {
             AccumulateTime -= Time.deltaTime;
@@ -133,7 +138,11 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     {
         Context.onAttack = true;
         
-
+        if (Mathf.Approximately(spikeTime, spikeMaxTime))
+        {
+            Context.InvokeSpike();
+        }
+        
         //冲刺动画区
         if (spikeTime > spikeMaxTime / 2)
         {
