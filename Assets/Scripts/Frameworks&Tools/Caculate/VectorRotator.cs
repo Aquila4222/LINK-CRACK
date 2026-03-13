@@ -22,4 +22,20 @@ public static class VectorRotator
 
         return new Vector2((float)vxRot, (float)vyRot);
     }
+    
+    /// <summary>
+    /// 按角度旋转
+    /// </summary>
+    /// <param name="v"></param>
+    /// <param name="angleDegrees"></param>
+    /// <returns></returns>
+    public static Vector2 RotateByAngle(Vector2 v, double angleDegrees)
+    {
+        double angleRadians = angleDegrees * Math.PI / 180.0;
+        double cos = Math.Cos(angleRadians);
+        double sin = Math.Sin(angleRadians);
+        double vxRot = v.x * cos - v.y * sin;
+        double vyRot = v.x * sin + v.y * cos;
+        return new Vector2((float)vxRot, (float)vyRot);
+    }
 }

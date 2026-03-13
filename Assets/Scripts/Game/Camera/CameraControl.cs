@@ -19,12 +19,22 @@ public class CameraControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        cameraRB.velocity = (PlayerTransform.position-transform.position)*speed;
+        float s;
+        if (Time.timeScale != 0)
+        {
+            s = 1/Time.timeScale;
+        }
+        else
+        {
+            s = 1;
+        }
+        cameraRB.velocity = (PlayerTransform.position-transform.position) * (speed * s);
     }
     
     public void Shock(Vector3 position)
     {
         StartCoroutine(PlayShock(position));
+        StartCoroutine(SlowTime(((Vector2)position - (Vector2)transform.position).magnitude));
     }
 
     IEnumerator PlayShock(Vector3 position)
@@ -33,7 +43,24 @@ public class CameraControl : MonoBehaviour
         for (int i = 5; i > 0; i--)
         {
             transform.position+=(Vector3)(Vector2)Random.onUnitSphere.normalized * (intensity * i);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSecondsRealtime(0.05f);
         }
+    }
+    
+    IEnumerator SlowTime(float distance)
+    {
+        yield return new WaitForSecondsRealtime(0.03f);
+        float intense = 0;
+        if (8 - distance > 0)
+        {
+            intense = (8-distance)/8;
+        }
+        else
+        {
+            intense = 0;
+        }
+        Time.timeScale = 0.2f;
+        yield return new WaitForSecondsRealtime(0.2f*intense);
+        Time.timeScale = 1;
     }
 }

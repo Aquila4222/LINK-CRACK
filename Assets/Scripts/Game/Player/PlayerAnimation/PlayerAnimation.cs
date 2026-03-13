@@ -188,6 +188,10 @@ public class PlayerAnimation : MonoBehaviour
             
             float h = (s*JumpSpeed-JumpRange);
             float w =  -(s * JumpSpeed - JumpRange);
+            if (w < -1)
+            {
+                w = -0.95f;
+            }
             
             transform.localScale = new Vector3(1 + w, 1 + h, 1);
             

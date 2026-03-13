@@ -21,6 +21,7 @@ public class PhysicalVE : MonoBehaviour
     
     IEnumerator PlayEffect(Vector3 pos,float time , Vector2 vel,Vector3 scale,Color color)
     {
+        rb.angularVelocity = Random.Range(-200f,200f);
         transform.position = pos;
         rb.velocity = vel;
         transform.localScale = scale;
