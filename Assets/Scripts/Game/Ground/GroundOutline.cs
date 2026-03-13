@@ -12,6 +12,8 @@ public class GroundOutline : MonoBehaviour
     
     private SpriteRenderer spriteRenderer;
     
+    private Vector3 rotation;
+    
     
 
     void Awake()
@@ -21,11 +23,15 @@ public class GroundOutline : MonoBehaviour
 
     void Start()
     {
+        rotation = transform.localEulerAngles;
+        transform.localEulerAngles = Vector3.zero;
+        
         GameObject obj = new GameObject();
         obj.name = "GroundInner";
         SpriteRenderer inner = obj.AddComponent<SpriteRenderer>();
         inner.sprite = spriteRenderer.sprite;
         inner.color = InnerColor;
+        inner.sortingLayerName = spriteRenderer.sortingLayerName;
    
         inner.transform.localScale = new Vector3(transform.localScale.x - lineWidth,transform.localScale.y - lineWidth, 1);
         inner.sortingOrder = spriteRenderer.sortingOrder+1;
@@ -34,6 +40,8 @@ public class GroundOutline : MonoBehaviour
         inner.transform.localPosition = Vector3.zero;
         
         spriteRenderer.color = LineColor;
+        
+        transform.localEulerAngles = rotation;
         
     }
 }
