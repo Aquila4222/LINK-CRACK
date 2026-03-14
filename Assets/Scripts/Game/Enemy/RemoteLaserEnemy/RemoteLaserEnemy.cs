@@ -1,23 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst;
 using UnityEngine;
 
-public enum RemoteBulletState
+public enum RemoteLaserState
 {
     Idle,
-    Chase,
+    Chasing,
     Attacking,
-    
 }
 
-public class RemoteBulletEnemy : Enemy
+public class RemoteLaserEnemy : Enemy
 {
-    private FSM<RemoteBulletState, RemoteBulletEnemy> remoteFSM;
-    
-    [Header("调试检测参数")]
-    [SerializeField] private RemoteBulletState currentRemoteState;
+    private FSM<RemoteLaserState,RemoteLaserEnemy> remoteFSM;
     
     [Header("敌人参数")]
     [SerializeField] public Vector3 facingDirection;
@@ -27,10 +22,8 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] public Transform gunTransform;
     [SerializeField] public Transform bulletGenerateTransform;
     [SerializeField] public float angleOffset;
-    [SerializeField] public float bulletSpeed;
     
-
-    public event Action StartIdle; 
+    public event Action StartIdle;
     public event Action StopIdle;
     public event Action StartAccumulate;
 
@@ -43,7 +36,7 @@ public class RemoteBulletEnemy : Enemy
     {
         StopIdle?.Invoke();
     }
-
+    
     public void InvokeStartAccumulate()
     {
         StartAccumulate?.Invoke();
@@ -57,12 +50,13 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] private float fallDetectionDistance;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private LayerMask whatIsObstruction;
+    [SerializeField] public LayerMask whatCanBlockLaser;
     [SerializeField] public bool lockTarget;
     [SerializeField] public bool insight;
     [SerializeField] public bool sightObstructed;
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
-
+    
     [Header("追击状态参数")] 
     [SerializeField] public float chaseSpeed;
     
@@ -70,47 +64,39 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] public float accumulateMaxTime;
     [SerializeField] public float maxAfterAttackShakeTime;
 
-    public void Initialized()
+    private void Initialized()
     {
         targetColliders = new Collider2D[1];
         rigidbody = GetComponent<Rigidbody2D>();
 
-        RemoteBulletAttack remoteBulletAttack = new RemoteBulletAttack(this);
-        RemoteBulletChase remoteBulletChase = new RemoteBulletChase(this);
-        RemoteBulletIdle remoteBulletIdle = new RemoteBulletIdle(this);
-        remoteFSM = new FSM<RemoteBulletState, RemoteBulletEnemy>(RemoteBulletState.Idle,remoteBulletIdle);
-        remoteFSM.AddState(RemoteBulletState.Chase,remoteBulletChase);
-        remoteFSM.AddState(RemoteBulletState.Attacking,remoteBulletAttack);
+        RemoteLaserAttack attack = new RemoteLaserAttack(this);
+        RemoteLaserChase chase = new RemoteLaserChase(this);
+        RemoteLaserIdle idle = new RemoteLaserIdle(this);
+        remoteFSM = new FSM<RemoteLaserState, RemoteLaserEnemy>(RemoteLaserState.Idle, idle);
+        remoteFSM.AddState(RemoteLaserState.Chasing, chase);
+        remoteFSM.AddState(RemoteLaserState.Attacking,attack);
     }
-
+    
     protected new void Awake()
     {
         base.Awake();
         Initialized();
     }
-    
 
     // Update is called once per frame
     new void Update()
     {
-        
         base.Update();
     }
-
-    /// <summary>
-    /// 活着，不被抓取状态
-    /// </summary>
+    
     protected override void Alive()
     {
         base.Alive();
-     
-        currentRemoteState = remoteFSM.CurrentEnumState;
-        
         
         Detect();
         remoteFSM.OnState();
     }
-
+    
     /// <summary>
     /// 转身函数
     /// </summary>
@@ -146,18 +132,19 @@ public class RemoteBulletEnemy : Enemy
     /// 提供给子状态的状态转换方法
     /// </summary>
     /// <param name="state"></param>
-    public void SwitchState(RemoteBulletState state)
+    public void SwitchState(RemoteLaserState state)
     {
         remoteFSM.SwitchState(state);
     }
     
     /// <summary>
-    /// 射击弹幕方法
+    /// 射击激光方法
     /// </summary>
     /// <param name="bulletPos"></param>
     /// <param name="bulletSpeed"></param>
     public void ShootBullet(Vector3 bulletPos, Vector3 bulletSpeed)
     {
+        //TODO:待重写
         BulletPool.Instance.Shoot(bulletPos, bulletSpeed);
     }
 
@@ -209,6 +196,4 @@ public class RemoteBulletEnemy : Enemy
             }
         }
     }
-
-
 }
