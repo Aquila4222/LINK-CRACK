@@ -179,6 +179,7 @@ MonoBehaviour:
   maxSpeed: {x: 0, y: 0}
   MaxBlood: 5
   ObjectColor: {r: 0.41568628, g: 0.34509805, b: 0.21176471, a: 1}
+  SEName: Wood
 --- !u!1 &2980210017434710375
 GameObject:
   m_ObjectHideFlags: 0

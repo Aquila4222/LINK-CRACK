@@ -15,6 +15,7 @@ public class CameraControl : MonoBehaviour
     {
         _instance = this;
         cameraRB = GetComponent<Rigidbody2D>();
+        transform.position = new Vector3(PlayerTransform.position.x, PlayerTransform.position.y, transform.position.z) ;
     }
 
     void FixedUpdate()
@@ -31,10 +32,15 @@ public class CameraControl : MonoBehaviour
         cameraRB.velocity = (PlayerTransform.position-transform.position) * (speed * s);
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
     public void Shock(Vector3 position)
     {
         StartCoroutine(PlayShock(position));
-        StartCoroutine(SlowTime(((Vector2)position - (Vector2)transform.position).magnitude));
+        //StartCoroutine(SlowTime(((Vector2)position - (Vector2)transform.position).magnitude));
+        SEPool.Instance.PlaySE("Shock",1f);
     }
 
     IEnumerator PlayShock(Vector3 position)

@@ -11,6 +11,8 @@ public class Box : CatchableMono,IHurt
     private int blood;
 
     public Color ObjectColor;
+
+    public string SEName;
     
     void Awake()
     {
@@ -22,6 +24,7 @@ public class Box : CatchableMono,IHurt
 
     private void TakeDamage()
     {
+        SEPool.Instance.PlaySE(SEName,1f);
         for (int i = 0; i < 10; i++)
         {
             ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.white,true);

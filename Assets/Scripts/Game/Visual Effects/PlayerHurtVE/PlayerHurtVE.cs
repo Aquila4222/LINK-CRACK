@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerHurtVE : MonoBehaviour
 {
+    private static PlayerHurtVE _instance;
+    public static PlayerHurtVE Instance => _instance;
+    
     public SpriteRenderer[] spikes;
     public Vector3[] spikeOrigin;
     public SpriteRenderer screen;
 
     void Awake()
     {
+        _instance = this;
         SetScreenAlpha(0);
         SetSpikesAlpha(0);
         spikeOrigin = new Vector3[spikes.Length];
@@ -20,14 +24,7 @@ public class PlayerHurtVE : MonoBehaviour
 
         SetSpikesTransform(0);
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            HurtVE();
-        }
-    }
+    
     
     public void HurtVE()
     {

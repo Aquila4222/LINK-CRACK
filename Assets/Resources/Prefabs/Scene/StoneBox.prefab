@@ -186,6 +186,7 @@ MonoBehaviour:
   maxSpeed: {x: 0, y: 0}
   MaxBlood: 20
   ObjectColor: {r: 0.37254903, g: 0.37254903, b: 0.37254903, a: 1}
+  SEName: Stone
 --- !u!1 &2980210017434710375
 GameObject:
   m_ObjectHideFlags: 0

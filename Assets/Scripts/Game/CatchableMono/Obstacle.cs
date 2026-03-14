@@ -35,6 +35,7 @@ public class Obstacle : CrackableMono,IHurt
     
     private void TakeDamage(Vector2 direction)
     {
+        SEPool.Instance.PlaySE("Stone",1f);
         StartCoroutine(HurtEffect());
         for (int i = 0; i < 10; i++)
         {

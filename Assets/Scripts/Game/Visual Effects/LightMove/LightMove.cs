@@ -21,7 +21,7 @@ public class LightMove : MonoBehaviour
         light2D = GetComponent<Light2D>();
         
         originalRotation = transform.localEulerAngles;
-        offset = Random.Range(0,6.28f);
+        offset = Random.Range(0f,6.28f);
         
         float c = Random.Range(-1f, 1f);
         if (c >= 0)

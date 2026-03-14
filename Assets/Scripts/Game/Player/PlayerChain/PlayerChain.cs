@@ -143,6 +143,8 @@ public class PlayerChain : MonoBehaviour
          isChaining = false;
          chainedMono.UnChain();
          chainedMono = null;
+         
+         SEPool.Instance.PlaySE("Chain",1f);
       }
    }
 
@@ -160,6 +162,7 @@ public class PlayerChain : MonoBehaviour
             isChaining = true;
             chainedMono = c;
             chainedMono.Chain();
+            SEPool.Instance.PlaySE("Chain",1f);
             break;
          }
       }

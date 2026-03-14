@@ -14,8 +14,12 @@ public class Laser : MonoBehaviour
     
     public void Shoot(Vector3 pos, Vector2 direction)
     {
+        SEPool.Instance.PlaySE("Laser",1);
+        
         RaycastHit2D hit =  Physics2D.Raycast(pos, direction, 100f, layerMask);
 
+        
+        
         float lenth;
         if (hit)
         {

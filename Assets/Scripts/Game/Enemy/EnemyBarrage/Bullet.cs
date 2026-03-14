@@ -57,6 +57,9 @@ public class Bullet : MonoBehaviour
         {
             ParticleVEPool.Instance.Play(transform.position,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white,true);
         }
+        
+        SEPool.Instance.PlaySE("Bullet",1f);
+        
         BulletPool.Instance.ReturnObject(gameObject);
     }
 
