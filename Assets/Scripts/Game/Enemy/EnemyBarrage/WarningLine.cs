@@ -27,7 +27,8 @@ public class WarningLine : MonoBehaviour
             length = hit.distance;
             
         }
-        
+
+        StartCoroutine(PlayEffect());
     }
     
     
