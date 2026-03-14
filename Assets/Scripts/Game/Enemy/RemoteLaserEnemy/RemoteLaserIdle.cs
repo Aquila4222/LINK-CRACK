@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
+public class RemoteLaserIdle : IState<RemoteLaserState,RemoteLaserEnemy>
 {
-   
 
-    public RemoteBulletEnemy Context { get; set; }
 
-    public RemoteBulletIdle(RemoteBulletEnemy context)
+    public RemoteLaserEnemy Context { get; set; }
+
+    public RemoteLaserIdle(RemoteLaserEnemy  context)
     {
         Context = context;
     }
     
-    public void OnEnterState(RemoteBulletState lastState)
+    public void OnEnterState(RemoteLaserState lastState)
     {
         Context.InvokeStartIdle();
     }
@@ -24,7 +24,7 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
 
         if(Context.lockTarget && !Context.sightObstructed && Context.insight)
         {
-            Context.SwitchState(RemoteBulletState.Attacking);
+            Context.SwitchState(RemoteLaserState.Attacking);
         }
     }
 
