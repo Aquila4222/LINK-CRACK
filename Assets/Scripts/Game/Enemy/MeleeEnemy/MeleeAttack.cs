@@ -93,7 +93,8 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     public void OnIdle()
     {
         Context.onAttack = false;
-
+        targetLockDirection = (Context.targetTransform.position - Context.transform.position).normalized;
+        
         if (attackStartTime > 0)
         {
             attackStartTime -= Time.deltaTime;
@@ -132,7 +133,6 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             damageStartTime = damageMaxStartTime;
             damageContinueTime = damageMaxContinueTime;
             Context.transform.localScale= new Vector2(Context.targetTransform.position.x > Context.transform.position.x  ? math.abs(Context.targetTransform.localScale.x) * Vector2.right.x : math.abs(Context.targetTransform.localScale.x) * Vector2.left.x,Context.targetTransform.localScale.y);
-            targetLockDirection = (Context.targetTransform.position - Context.transform.position).normalized;
         }
     }
 

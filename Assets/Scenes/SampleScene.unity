@@ -306,7 +306,7 @@ Transform:
   m_GameObject: {fileID: 368527802}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.21, y: 10.17, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -824,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 1726873231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.54, y: -2.68, z: 0}
+  m_LocalPosition: {x: -7.79, y: 3.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -941,7 +941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: spikeMaxTime
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: maxAccumulateTime
@@ -949,7 +949,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: attackStartMinTime
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: whatIsCanHurt.m_Bits
