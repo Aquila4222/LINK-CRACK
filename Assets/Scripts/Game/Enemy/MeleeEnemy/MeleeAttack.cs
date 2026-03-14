@@ -158,8 +158,10 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         }
         else if(!hitAnObject && Context.DetectOnGround())
         {
+            this.Context.rigidBody.velocity /= 10;
             attackState = MeleeAttackState.Idle;
             Context.onSpike = false;
+            Context.InvokeSpikeEnd();
         }
         
     }
@@ -184,7 +186,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             hitAnObject = true;
         }
 
-        if (hitAnObject && Context.DetectOnGround())
+        if (hitAnObject)
         {
             attackState = MeleeAttackState.Idle;
             hitAnObject = false;
