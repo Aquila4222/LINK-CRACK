@@ -6402,6 +6402,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: spikeMaxTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: maxShakeAfterAttackTime
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2650227762857021392, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: m_Name
       value: MeleeEnemy
@@ -6466,6 +6474,10 @@ PrefabInstance:
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: drawLine
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: spikeMaxTime
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: attackMaxTime

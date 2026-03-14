@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,17 +10,19 @@ public class WarningLinePool : ObjectPoolTemplate<WarningLinePool>
     {
         warmCount = 5;
         poolSize = 30;
-        //TODO:预制体加载
+        objectPrefab = Resources.Load<GameObject>("Prefabs/WarningLine");
         
         base.Awake();
     }
 
-    public void ShowWarningLine(Vector3 position,Vector3 direction)
+    public void ShowWarningLine(Vector3 position,Vector3 direction,float time)
     {
         WarningLine line = GetObject().GetComponent<WarningLine>();
         if (line != null)
         {
-            line.ShowWarningLine(position, direction);
+            line.ShowWarningLine(position, direction,time);
         }
     }
+
+   
 }

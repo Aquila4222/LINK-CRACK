@@ -144,8 +144,7 @@ public class RemoteLaserEnemy : Enemy
     /// <param name="bulletSpeed"></param>
     public void ShootBullet(Vector3 bulletPos, Vector3 bulletSpeed)
     {
-        //TODO:待重写
-        BulletPool.Instance.Shoot(bulletPos, bulletSpeed);
+        LaserPool.Instance.Shoot(bulletPos, bulletSpeed);
     }
 
     /// <summary>

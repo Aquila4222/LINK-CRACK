@@ -11,8 +11,13 @@ public class RemoteLaserAttack : IState<RemoteLaserState,RemoteLaserEnemy>
     private float accumulateCurrentTime;
     private float currentAfterAttackShakeTime;
     private bool attacked;
+    private bool startAccumulate;
+    private bool startWarning;
     
     private Vector3 laserLockDirection;
+    private float maxWarningTime;
+    private float warningTime;
+    
     
     public RemoteLaserAttack(RemoteLaserEnemy  context)
     {
@@ -30,7 +35,21 @@ public class RemoteLaserAttack : IState<RemoteLaserState,RemoteLaserEnemy>
 
     public void OnState()
     {
-        if (accumulateCurrentTime > 0)
+        if (startWarning)
+        {
+            startWarning = false;
+            LaserWarning(Context.bulletGenerateTransform.position, laserLockDirection,warningTime);
+        }
+        if (warningTime > 0)
+        {
+            warningTime -= Time.deltaTime;
+            
+        }else if (startAccumulate)
+        {
+            startAccumulate = false;
+            
+        }
+        else if (accumulateCurrentTime > 0)
         {
             accumulateCurrentTime -= Time.deltaTime;
             Vector3 direction = Context.targetTransform.position.x > Context.transform.position.x ? Vector3.right : Vector3.left;
@@ -38,7 +57,6 @@ public class RemoteLaserAttack : IState<RemoteLaserState,RemoteLaserEnemy>
             Context.PointGunAtTarget();
             
             laserLockDirection = (Context.targetTransform.position - Context.bulletGenerateTransform.position).normalized;
-            LaserWarning(Context.bulletGenerateTransform.position, laserLockDirection);
         }
         else if (!attacked)
         {
@@ -70,18 +88,8 @@ public class RemoteLaserAttack : IState<RemoteLaserState,RemoteLaserEnemy>
         
     }
 
-    private void LaserWarning(Vector3 position, Vector3 direction)
+    private void LaserWarning(Vector3 position, Vector3 direction,float time)
     {
-        RaycastHit2D hit = Physics2D.Raycast(position, direction,100f,Context.whatCanBlockLaser);
-
-        float length;
-        if (hit)
-        {
-            length = hit.distance;
-            if (hit.collider != null)
-            {
-                
-            }
-        }
+        WarningLinePool.Instance.ShowWarningLine(position,direction,time);
     }
 }
