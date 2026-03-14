@@ -11,7 +11,9 @@ public class EnemyAnimation : MonoBehaviour
         Idle,
         Walking,
         Jumping,
-        Landing
+        Landing,
+        Accumulate,
+        Spike,
     }
 
     public float BreathSpeed;
@@ -25,6 +27,11 @@ public class EnemyAnimation : MonoBehaviour
     
     public float LandingSpeed;
     public float LandingRange;
+    
+    public float AccumulateSpeed;
+    public float AccumulateRange;
+    
+    public float SpikeSpeed;
     
     public AnimationState state;
     
@@ -40,10 +47,22 @@ public class EnemyAnimation : MonoBehaviour
 
     private float effectTimer;
     
+    private MeleeEnemy meleeEnemy;
+
+    public bool IsFrozen;
+    
     void Awake()
     {
         rb = GetComponentInParent<Rigidbody2D>();
+        meleeEnemy = GetComponentInParent<MeleeEnemy>();
+        if (meleeEnemy)
+        {
+            meleeEnemy.StartAccumulate += Accumulate;
+            meleeEnemy.StartSpike += Spike;
+            meleeEnemy.OnSpikeEnd += SpikeEnd;
+        }
     }
+    
     
     void Start()
     {
@@ -61,6 +80,25 @@ public class EnemyAnimation : MonoBehaviour
         isGrounded = grounded;
     }
 
+    private void Accumulate()
+    {
+        state =  AnimationState.Accumulate;
+        timer = 0;
+    }
+
+    private void Spike()
+    {
+        state =  AnimationState.Spike;
+        timer = 0;
+    }
+
+    private void SpikeEnd()
+    {
+        state =  AnimationState.Idle;
+        timer = 0;
+    }
+    
+    
     void Update()
     {
 
@@ -83,6 +121,42 @@ public class EnemyAnimation : MonoBehaviour
                 state = AnimationState.Landing;
             }
 
+        }
+
+        if (state is AnimationState.Accumulate)
+        {
+            timer += Time.deltaTime * AccumulateSpeed;
+            float ctimer = Math.Clamp(timer, 0, 1);
+            t2 = ctimer * (2 - ctimer);
+            float h = (t2 - 0.5f) * AccumulateRange;
+            float w = -(t2 - 0.5f) * AccumulateRange;
+
+            transform.localScale = new Vector3(1 + w, 1 + h, 1);
+
+            transform.localPosition = new Vector3(w/2, h / 2, 0);
+            if (timer > 2)
+            {
+                timer = 0;
+                state = AnimationState.Idle;
+            }
+        }
+
+        if (state is AnimationState.Spike)
+        {
+            transform.localEulerAngles +=  new Vector3(0, 0, SpikeSpeed*Time.deltaTime);
+            if (timer < 0.5)
+            {
+                timer += Time.deltaTime;
+            }
+            else
+            {
+                timer = 0;
+                state = AnimationState.Idle;
+            }
+        }
+        else
+        {
+            transform.localEulerAngles = Vector3.zero;
         }
 
         if (state == AnimationState.Idle)
@@ -211,6 +285,12 @@ public class EnemyAnimation : MonoBehaviour
             transform.localScale = new Vector3(1 + w, 1 + h, 1);
 
             transform.localPosition = new Vector3(0, h / 2, 0);
+        }
+
+        if (IsFrozen)
+        {
+            transform.localEulerAngles = Vector3.zero;
+            transform.localScale = Vector3.one;
         }
     }
 }

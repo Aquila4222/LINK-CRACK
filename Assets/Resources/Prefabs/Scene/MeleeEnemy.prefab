@@ -303,6 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
+  currentState: 0
   onSpike: 0
   drawLine: 1
   facingDirection: {x: 0, y: 0, z: 0}
@@ -320,7 +321,7 @@ MonoBehaviour:
   detectedColliders: []
   attackColliders: []
   detectRadius: 7
-  attackRadius: 5
+  attackRadius: 2
   attackSize: {x: 1.1, y: 1.1, z: 0}
   jumpDetectionStartOffsetDistance: {x: -0.5, y: -0.53, z: 0}
   jumpDetectionEndOffsetDistance: {x: 0.5, y: -0.53, z: 0}
@@ -348,13 +349,13 @@ MonoBehaviour:
   attackStartMinTime: 0
   attackState: 0
   animationTransform: {fileID: 2363806901811200222}
-  spikeMaxTime: 0.5
+  spikeMaxTime: 0.2
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
-  maxAccumulateTime: 2
+  maxAccumulateTime: 0.5
   damageStartTime: 2
   damageContinueTime: 1
   spikeSpeed: 20
-  reboundForce: 50
+  reboundForce: 10
 --- !u!61 &255073557762492916
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -536,11 +537,15 @@ MonoBehaviour:
   JumpRange: 0.1
   LandingSpeed: 8
   LandingRange: 0.2
+  AccumulateSpeed: 1
+  AccumulateRange: 0.5
+  SpikeSpeed: 2000
   state: 0
   Move: 0
   isGrounded: 0
   timer: 0
   direction: 1
+  IsFrozen: 0
 --- !u!1 &4303475101737652148
 GameObject:
   m_ObjectHideFlags: 0
