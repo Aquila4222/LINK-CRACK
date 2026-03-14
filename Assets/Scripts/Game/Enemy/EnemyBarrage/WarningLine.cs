@@ -28,10 +28,12 @@ public class WarningLine : MonoBehaviour
             
         }
 
-        StartCoroutine(PlayEffect());
+        
     }
+
     
-    
+
+
     IEnumerable PlayEffect()
     {
         float totalTime = 0;

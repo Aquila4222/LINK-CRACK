@@ -101,8 +101,9 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         }
         else
         {
-            attackStartTime = attackStartMinTime;
+            attackStartTime = attackMaxTime;;
             attackState = MeleeAttackState.Accumulate;
+            AccumulateTime = maxAccumulateTime;
         }
     }
 
@@ -111,7 +112,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     /// </summary>
     private void OnAccumulate()
     {
-        Context.onAttack = false;
+        Context.onAttack = true;
         
         Context.Move(0,Context.facingDirection);
         if (Mathf.Approximately(AccumulateTime, maxAccumulateTime))
@@ -188,6 +189,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             attackState = MeleeAttackState.Idle;
             hitAnObject = false;
             Context.onSpike =  false;
+            attackStartTime = attackMaxTime;
         }
     }
 }
