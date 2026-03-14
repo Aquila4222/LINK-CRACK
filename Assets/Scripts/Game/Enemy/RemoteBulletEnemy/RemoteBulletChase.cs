@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
@@ -8,6 +10,8 @@ public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
 
     public RemoteBulletEnemy Context { get; set; }
 
+    private float chaseSpeed;
+
     public RemoteBulletChase(RemoteBulletEnemy context)
     {
         Context = context;
@@ -15,11 +19,25 @@ public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
     
     public void OnEnterState(RemoteBulletState lastState)
     {
-        throw new System.NotImplementedException();
+        chaseSpeed = Context.chaseSpeed;
     }
 
     public void OnState()
     {
+        if (Context.targetTransform != null)
+        {
+            Vector3 direction = Context.targetTransform.position.x > Context.transform.position.x ? Vector3.right : Vector3.left;
+            Context.TurnOrientation(direction);
+            if (math.abs(Context.targetTransform.position.x - Context.transform.position.x) > 0.3)
+            {
+                Context.Move(chaseSpeed,direction);
+            }
+            else
+            {
+                Context.Move(0,direction);
+            }
+        }
+        
         //状态转换
         if (!Context.lockTarget)
         {
@@ -33,6 +51,6 @@ public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
 
     public void OnExitState()
     {
-        throw new System.NotImplementedException();
+        Context.Move(0,Context.facingDirection);
     }
 }

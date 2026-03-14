@@ -15,7 +15,7 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
     
     public void OnEnterState(RemoteBulletState lastState)
     {
-        throw new System.NotImplementedException();
+        Context.InvokeStartIdle();
     }
 
     public void OnState()
@@ -23,11 +23,8 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
         
         
         //状态转换
-        if (Context.canChase && Context.sightObstructed)
-        {
-            Context.SwitchState(RemoteBulletState.Chase);
-        }
-        else if(Context.lockTarget && !Context.sightObstructed && Context.insight)
+
+        if(Context.lockTarget && !Context.sightObstructed && Context.insight)
         {
             Context.SwitchState(RemoteBulletState.Attacking);
         }
@@ -35,6 +32,6 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
 
     public void OnExitState()
     {
-        throw new System.NotImplementedException();
+        Context.InvokeStopIdle();
     }
 }

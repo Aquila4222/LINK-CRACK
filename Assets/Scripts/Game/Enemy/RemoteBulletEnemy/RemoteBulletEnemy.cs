@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
 using UnityEngine;
 
 public enum RemoteBulletState
@@ -13,30 +15,65 @@ public enum RemoteBulletState
 public class RemoteBulletEnemy : Enemy
 {
     private FSM<RemoteBulletState, RemoteBulletEnemy> remoteFSM;
+
+    enum  RemoteEnemyType
+    {
+        Bullet,
+        Laser
+    }
+    
     
     [Header("调试检测参数")]
     [SerializeField] private RemoteBulletState currentRemoteState;
+
+    [SerializeField] private Vector3 Direction;
     
     [Header("敌人参数")]
-    [SerializeField] private Vector3 facingDirection;
-    [SerializeField] private Vector3 bulletGeneratePosition;
+    [SerializeField]
+    public Vector3 facingDirection;
+    [SerializeField] private Rigidbody2D rigidbody;
+    
+    [Header("弹幕参数")]
+    [SerializeField] public Transform gunTransform;
+    [SerializeField] public float angleOffset;
+    [SerializeField] public float bulletSpeed;
     
 
+    public event Action StartIdle;
+    public event Action StopIdle;
+    public event Action StartAccumulate;
+
+    public void InvokeStartIdle()
+    {
+        StartIdle?.Invoke();
+    }
+
+    public void InvokeStopIdle()
+    {
+        StopIdle?.Invoke();
+    }
+
+    public void InvokeStartAccumulate()
+    {
+        StartAccumulate?.Invoke();
+    }
+    
     [Header("检测参数")] 
-    [SerializeField] private Transform targetTransform;
+    [SerializeField] public Transform targetTransform;
     [SerializeField] private Collider2D[] targetColliders;
     [SerializeField] private float alertRadius;
+    [SerializeField] private Vector3 fallDetectionOffsetDistance;
+    [SerializeField] private float fallDetectionDistance;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private LayerMask whatIsObstruction;
     [SerializeField] public bool lockTarget;
     [SerializeField] public bool insight;
     [SerializeField] public bool sightObstructed;
-    [SerializeField] public bool canChase;
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
 
     [Header("追击状态参数")] 
-    [SerializeField] private float chaseSpeed;
+    [SerializeField] public float chaseSpeed;
     
     [Header("攻击状态参数")]
     [SerializeField] public float accumulateMaxTime;
@@ -45,6 +82,7 @@ public class RemoteBulletEnemy : Enemy
     public void Initialized()
     {
         targetColliders = new Collider2D[1];
+        rigidbody = GetComponent<Rigidbody2D>();
 
         RemoteBulletAttack remoteBulletAttack = new RemoteBulletAttack(this);
         RemoteBulletChase remoteBulletChase = new RemoteBulletChase(this);
@@ -53,16 +91,18 @@ public class RemoteBulletEnemy : Enemy
         remoteFSM.AddState(RemoteBulletState.Chase,remoteBulletChase);
         remoteFSM.AddState(RemoteBulletState.Attacking,remoteBulletAttack);
     }
-    
-    // Start is called before the first frame update
-    void Start()
+
+    protected new void Awake()
     {
+        base.Awake();
         Initialized();
     }
+    
 
     // Update is called once per frame
     new void Update()
     {
+        
         base.Update();
     }
 
@@ -80,13 +120,39 @@ public class RemoteBulletEnemy : Enemy
         remoteFSM.OnState();
     }
 
-    public void Move(float speed, Vector3 direction)
+    /// <summary>
+    /// 转身函数
+    /// </summary>
+    /// <param name="direction"></param>
+    public void TurnOrientation(Vector3 direction)
     {
-        
+        facingDirection = direction;
+        transform.localScale = new Vector3(facingDirection.x,transform.localScale.y,transform.localScale.z);
     }
     
     /// <summary>
-    /// 提供给子状态的状态转换函数
+    /// 移动方法
+    /// </summary>
+    /// <param name="speed"></param>
+    /// <param name="direction"></param>
+    public void Move(float speed, Vector3 direction)
+    {
+        bool fallDetection = Physics2D.Raycast(
+            transform.position + new Vector3(fallDetectionOffsetDistance.x * facingDirection.x,
+                fallDetectionOffsetDistance.y, fallDetectionOffsetDistance.z), Vector2.down, fallDetectionDistance,
+            whatIsGround);
+        if (rigidbody != null && fallDetection)
+        {
+            rigidbody.velocity = direction * speed;
+        }
+        else
+        {
+            rigidbody.velocity = Vector2.zero;
+        }
+    }
+    
+    /// <summary>
+    /// 提供给子状态的状态转换方法
     /// </summary>
     /// <param name="state"></param>
     public void SwitchState(RemoteBulletState state)
@@ -101,7 +167,24 @@ public class RemoteBulletEnemy : Enemy
     /// <param name="bulletSpeed"></param>
     public void ShootBullet(Vector3 bulletPos, Vector3 bulletSpeed)
     {
-        //TODO:射击弹幕方法待写
+        BulletPool.Instance.Shoot(bulletPos, bulletSpeed);
+    }
+
+    /// <summary>
+    /// 枪指向角色
+    /// </summary>
+    public void PointGunAtTarget()
+    {
+        if(targetTransform == null)
+            return;
+        
+        Vector2 direction = targetTransform.position - gunTransform.position;
+        if (direction == Vector2.zero) return;
+        
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg +  angleOffset;
+        
+        gunTransform.localScale = transform.localScale;
+        gunTransform.rotation = Quaternion.Euler(0,0,angle);
     }
     
     /// <summary>
@@ -121,10 +204,6 @@ public class RemoteBulletEnemy : Enemy
         if (lockTarget)
         {
             sightObstructed = Physics2D.Linecast(transform.position, targetTransform.position, whatIsObstruction);
-            if (!sightObstructed)
-            {
-                canChase = true;
-            }
         }
         
         
@@ -135,11 +214,10 @@ public class RemoteBulletEnemy : Enemy
             if (lockTime < 0)
             {
                 lockTarget = false;
-                canChase = false;
                 targetTransform = null;
             }
         }
     }
 
-    
+
 }
