@@ -19,6 +19,7 @@ public class RemoteBulletEnemy : Enemy
     
     [Header("敌人参数")]
     [SerializeField] private Vector3 facingDirection;
+    [SerializeField] private Vector3 bulletGeneratePosition;
     
 
     [Header("检测参数")] 
@@ -45,9 +46,9 @@ public class RemoteBulletEnemy : Enemy
     {
         targetColliders = new Collider2D[1];
 
-        RemoteBulletAttack remoteBulletAttack = new RemoteBulletAttack();
-        RemoteBulletChase remoteBulletChase = new RemoteBulletChase();
-        RemoteBulletIdle remoteBulletIdle = new RemoteBulletIdle();
+        RemoteBulletAttack remoteBulletAttack = new RemoteBulletAttack(this);
+        RemoteBulletChase remoteBulletChase = new RemoteBulletChase(this);
+        RemoteBulletIdle remoteBulletIdle = new RemoteBulletIdle(this);
         remoteFSM = new FSM<RemoteBulletState, RemoteBulletEnemy>(RemoteBulletState.Idle,remoteBulletIdle);
         remoteFSM.AddState(RemoteBulletState.Chase,remoteBulletChase);
         remoteFSM.AddState(RemoteBulletState.Attacking,remoteBulletAttack);

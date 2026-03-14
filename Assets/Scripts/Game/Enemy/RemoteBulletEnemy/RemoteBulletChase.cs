@@ -7,6 +7,12 @@ public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
 
 
     public RemoteBulletEnemy Context { get; set; }
+
+    public RemoteBulletChase(RemoteBulletEnemy context)
+    {
+        Context = context;
+    }
+    
     public void OnEnterState(RemoteBulletState lastState)
     {
         throw new System.NotImplementedException();

@@ -303,7 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
-  drawLine: 0
+  onSpike: 0
+  drawLine: 1
   facingDirection: {x: 0, y: 0, z: 0}
   rigidBody: {fileID: 0}
   enemyAnimation: {fileID: 4565673112815790921}
@@ -314,11 +315,13 @@ MonoBehaviour:
   sightObstructed: 0
   canAttack: 0
   onAttack: 0
+  enemyCollider: {fileID: 0}
+  hurtCollider: {fileID: 0}
   detectedColliders: []
   attackColliders: []
-  detectRadius: 5.89
-  attackRadius: 2.03
-  attackSize: {x: 0.5, y: 1, z: 0}
+  detectRadius: 7
+  attackRadius: 5
+  attackSize: {x: 1.1, y: 1.1, z: 0}
   jumpDetectionStartOffsetDistance: {x: -0.5, y: -0.53, z: 0}
   jumpDetectionEndOffsetDistance: {x: 0.5, y: -0.53, z: 0}
   fallDetectionOffsetDistance: {x: 0.5, y: -0.5, z: 0}
@@ -326,6 +329,9 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 128
+  whatIsCanHurt:
+    serializedVersion: 2
+    m_Bits: 1408
   whatIsObstruction:
     serializedVersion: 2
     m_Bits: 64
@@ -342,12 +348,13 @@ MonoBehaviour:
   attackStartMinTime: 0
   attackState: 0
   animationTransform: {fileID: 2363806901811200222}
-  spikeMaxTime: 0.2
+  spikeMaxTime: 0.5
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
-  maxAccumulateTime: 0.5
+  maxAccumulateTime: 2
   damageStartTime: 2
   damageContinueTime: 1
-  spikeForce: {x: 0, y: 0, z: 0}
+  spikeSpeed: 20
+  reboundForce: 50
 --- !u!61 &255073557762492916
 BoxCollider2D:
   m_ObjectHideFlags: 0

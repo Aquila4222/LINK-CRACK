@@ -14,6 +14,11 @@ public class RemoteBulletAttack : IState<RemoteBulletState,RemoteBulletEnemy>
     //弹幕参数
     private Vector3 bulletGeneratePosition;
     private Vector3 bulletSpeed;
+
+    public RemoteBulletAttack(RemoteBulletEnemy  context)
+    {
+        Context = context;
+    }
     
     public void OnEnterState(RemoteBulletState lastState)
     {
