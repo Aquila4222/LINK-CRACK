@@ -16,7 +16,7 @@ TagManager:
   - Enemy
   - SpecialEffect
   - Object
-  - 
+  - Platform
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: BackGround
     uniqueID: 2705674553
+    locked: 0
+  - name: Back
+    uniqueID: 2746424159
     locked: 0
   - name: Default
     uniqueID: 0

@@ -101,7 +101,7 @@ public class CatchableMono : MonoBehaviour
         if (canHurtOther == true)
         {
             CatchableMono c = collision.gameObject.GetComponent<CatchableMono>();
-            if (c || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            if (c || collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||  collision.gameObject.layer == LayerMask.NameToLayer("Platform") )
             {
                 Vector2 normal = collision.contacts[0].normal;
                 if (Vector2.Dot(maxSpeed,-normal) > CrashSpeed && canHurtOther)

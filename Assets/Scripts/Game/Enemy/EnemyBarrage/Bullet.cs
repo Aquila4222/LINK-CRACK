@@ -39,6 +39,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Platform"))
+        {
+            return;
+        }
         IHurt hurt = collision.gameObject.GetComponent<IHurt>();
         if (hurt != null)
         {
