@@ -326,7 +326,7 @@ MonoBehaviour:
   jumpDetectionStartOffsetDistance: {x: -0.5, y: -0.53, z: 0}
   jumpDetectionEndOffsetDistance: {x: 0.5, y: -0.53, z: 0}
   fallDetectionOffsetDistance: {x: 0.5, y: -0.5, z: 0}
-  fallDetectionDistance: 0.2
+  fallDetectionDistance: 3.02
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 128
@@ -538,7 +538,7 @@ MonoBehaviour:
   JumpRange: 0.1
   LandingSpeed: 8
   LandingRange: 0.2
-  AccumulateSpeed: 1
+  AccumulateSpeed: 2
   AccumulateRange: 0.5
   SpikeSpeed: 2000
   state: 0
