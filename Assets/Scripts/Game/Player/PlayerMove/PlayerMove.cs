@@ -8,7 +8,6 @@ public class PlayerMove : MonoBehaviour
     public float MoveSpeed;
     
     public LayerMask GroundMask;
-    public LayerMask ObjectMask;
 
     public float RayHeight;
     public float RayLength;
@@ -29,6 +28,7 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponentInChildren<PlayerAnimation>();
         InputController.Instance.RegisterJump(Jump);
+        GroundMask =  LayerMask.GetMask("Ground") + LayerMask.GetMask("Platform") + LayerMask.GetMask("Object")+LayerMask.GetMask("Enemy");
     }
 
     private void OnDestroy()
@@ -60,9 +60,10 @@ public class PlayerMove : MonoBehaviour
         {
             xDirection = 0;
         }
-        
-        isGrounded = Physics2D.Raycast(transform.position + new Vector3(-RayLength/2,RayHeight), Vector2.right, RayLength, GroundMask)
-            ||Physics2D.Raycast(transform.position + new Vector3(-RayLength/2,RayHeight), Vector2.right, RayLength, ObjectMask);
+
+        isGrounded = Physics2D.Raycast(transform.position + new Vector3(-RayLength / 2, RayHeight), Vector2.right,
+            RayLength, GroundMask);
+    
         
         playerAnimation.SetMove(xDirection);
         playerAnimation.SetIsGrounded(isGrounded);
