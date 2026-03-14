@@ -34,9 +34,13 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     private float reboundForce;
     private Vector3 targetLockDirection;
     private bool hitAnObject;
+    private float maxShakeAfterAttackTime;
+    private float currentShakeTime;
     
     //状态转换条件
     private bool spikeForward;
+    private bool spikeStop;
+    private bool startShakeAfterAttack;
 
     public MeleeAttack(MeleeEnemy  context)
     {
@@ -58,6 +62,8 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         damageMaxContinueTime = Context.damageContinueTime;
         spikeSpeed = Context.spikeSpeed;
         reboundForce = Context.reboundForce;
+        maxShakeAfterAttackTime = Context.maxShakeAfterAttackTime;
+        currentShakeTime = maxShakeAfterAttackTime;
     }
 
     public void OnState()
@@ -99,7 +105,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         {
             attackStartTime -= Time.deltaTime;
         }
-        else if(attackStartTime <= 0 && Context.attackCoolingTime <= 0)
+        else if(attackStartTime <= 0)
         {
             attackStartTime = attackMaxTime;;
             attackState = MeleeAttackState.Accumulate;
@@ -156,13 +162,26 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             spikeTime -= Time.deltaTime;
             Spike();
         }
+        else if (spikeTime <= 0 && !spikeStop)
+        {
+            spikeStop = true;
+            Context.InvokeSpikeEnd();
+            Context.rigidBody.velocity /= 10;
+        }
         else if(!hitAnObject && Context.DetectOnGround())
         {
-            this.Context.rigidBody.velocity /= 10;
+            startShakeAfterAttack = true;
+        }
+        else if (startShakeAfterAttack && currentShakeTime > 0)
+        {
+            currentShakeTime -= Time.deltaTime;
+        }
+        else if (currentShakeTime <= 0)
+        {
             attackState = MeleeAttackState.Idle;
             Context.onSpike = false;
-            Context.InvokeSpikeEnd();
-            Context.attackCoolingTime = Context.attackMaxCoolingTime;
+            currentShakeTime = maxShakeAfterAttackTime;
+            spikeForward = false;
         }
         
     }
@@ -189,12 +208,22 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
 
         if (hitAnObject)
         {
-            Context.attackCoolingTime = Context.attackMaxCoolingTime;
+            startShakeAfterAttack = true;
+        }
+        else if (startShakeAfterAttack  && currentShakeTime > 0)
+        {
+            currentShakeTime -= Time.deltaTime;
+        }
+        else if (currentShakeTime <= 0)
+        {
             attackState = MeleeAttackState.Idle;
             hitAnObject = false;
             Context.onSpike =  false;
             attackStartTime = attackMaxTime;
+            currentShakeTime = maxShakeAfterAttackTime;
         }
+        
+        
     }
 
     
