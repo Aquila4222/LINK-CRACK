@@ -144,6 +144,7 @@ public class EnemyAnimation : MonoBehaviour
         if (state is AnimationState.Spike)
         {
             transform.localEulerAngles +=  new Vector3(0, 0, SpikeSpeed*Time.deltaTime);
+            transform.localScale = Vector3.one;
             if (timer < 0.5)
             {
                 timer += Time.deltaTime;
