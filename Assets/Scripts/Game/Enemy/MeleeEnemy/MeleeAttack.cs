@@ -48,7 +48,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         attackState = MeleeAttackState.Idle;
         maxAccumulateTime = Context.maxAccumulateTime;
         spikeForward = false;
-        attackMaxTime = Context.attackMaxTime;
+        attackMaxTime = Context.idleTime;
         attackStartTime = attackMaxTime;
         
         spikeOffsetDistance = Context.spikeOffsetDistance;
@@ -99,7 +99,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         {
             attackStartTime -= Time.deltaTime;
         }
-        else
+        else if(attackStartTime <= 0 && Context.attackCoolingTime <= 0)
         {
             attackStartTime = attackMaxTime;;
             attackState = MeleeAttackState.Accumulate;
@@ -162,6 +162,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
             attackState = MeleeAttackState.Idle;
             Context.onSpike = false;
             Context.InvokeSpikeEnd();
+            Context.attackCoolingTime = Context.attackMaxCoolingTime;
         }
         
     }
@@ -188,10 +189,13 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
 
         if (hitAnObject)
         {
+            Context.attackCoolingTime = Context.attackMaxCoolingTime;
             attackState = MeleeAttackState.Idle;
             hitAnObject = false;
             Context.onSpike =  false;
             attackStartTime = attackMaxTime;
         }
     }
+
+    
 }

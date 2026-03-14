@@ -84,12 +84,13 @@ public class MeleeEnemy : Enemy
     [SerializeField] public float chaseSpeed;
     
     [Header("攻击状态参数")]
-    [SerializeField] public float attackMaxTime;
-    [SerializeField] public float attackStartMinTime;
+    [SerializeField] public float idleTime;
     [SerializeField] public int attackState;
     [SerializeField] public Transform animationTransform;
-    
+
     [Header("攻击状态参数改动区")]
+    [SerializeField] public float attackMaxCoolingTime;
+    [SerializeField] public float attackCoolingTime;
     [SerializeField] public float spikeMaxTime;
     [SerializeField] public Vector3 spikeOffsetDistance;
     [SerializeField] public float maxAccumulateTime;
@@ -131,10 +132,14 @@ public class MeleeEnemy : Enemy
     }
 
     // Update is called once per frame
-    protected void Update()
+    protected new void Update()
     {
         base.Update();
-        
+
+        if (attackCoolingTime > 0)
+        {
+            attackCoolingTime -= Time.deltaTime;
+        }
         
         enemyAnimation.SetIsGrounded(onGroundForJump);
         enemyAnimation.IsFrozen = currentState == EnemyStateType.OnFroze;

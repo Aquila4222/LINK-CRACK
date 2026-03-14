@@ -6471,6 +6471,10 @@ PrefabInstance:
       propertyPath: attackMaxTime
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: attackMaxCoolingTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2650227762857021392, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: m_Name
       value: MeleeEnemy (1)

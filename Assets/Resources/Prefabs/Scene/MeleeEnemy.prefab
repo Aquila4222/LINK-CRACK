@@ -345,10 +345,11 @@ MonoBehaviour:
   turnAroundTime: 0
   patrolSpeed: 2
   chaseSpeed: 6
-  attackMaxTime: 0
-  attackStartMinTime: 0
+  idleTime: 0
   attackState: 0
   animationTransform: {fileID: 2363806901811200222}
+  attackMaxCoolingTime: 2
+  attackCoolingTime: 0
   spikeMaxTime: 0.2
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
   maxAccumulateTime: 0.5
