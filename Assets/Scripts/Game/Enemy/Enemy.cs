@@ -17,7 +17,7 @@ public class Enemy : CatchableMono,IHurt
 {
      protected float Health { get; set; }
 
-     protected EnemyStateType currentState;
+     public EnemyStateType currentState;
      private Vector3 detectStartOffsetDistance;
      private Vector3  detectEndOffsetDistance;
      protected LayerMask whatIsGround;

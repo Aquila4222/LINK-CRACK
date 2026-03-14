@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Mime;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
+public class RemoteLaserChase : IState<RemoteLaserState,RemoteLaserEnemy>
 {
 
-
-    public RemoteBulletEnemy Context { get; set; }
-
     private float chaseSpeed;
-
-    public RemoteBulletChase(RemoteBulletEnemy context)
+    public RemoteLaserEnemy Context { get; set; }
+    
+    public RemoteLaserChase(RemoteLaserEnemy  context)
     {
         Context = context;
     }
     
-    public void OnEnterState(RemoteBulletState lastState)
+    public void OnEnterState(RemoteLaserState lastState)
     {
         chaseSpeed = Context.chaseSpeed;
     }
@@ -41,11 +38,11 @@ public class RemoteBulletChase : IState<RemoteBulletState,RemoteBulletEnemy>
         //状态转换
         if (!Context.lockTarget)
         {
-            Context.SwitchState(RemoteBulletState.Idle);
+            Context.SwitchState(RemoteLaserState.Idle);
         }
         else if (Context.lockTarget && !Context.sightObstructed && Context.insight)
         {
-            Context.SwitchState(RemoteBulletState.Attacking);
+            Context.SwitchState(RemoteLaserState.Attacking);
         }
     }
 

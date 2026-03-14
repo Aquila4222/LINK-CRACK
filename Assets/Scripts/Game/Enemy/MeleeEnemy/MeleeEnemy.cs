@@ -176,7 +176,7 @@ public class MeleeEnemy : Enemy
             {
                 if (canHurt != enemyCollider)
                 {
-                    //canHurt.gameObject.GetComponent<IHurt>().Hurt(Vector2.zero);
+                    canHurt.gameObject.GetComponent<IHurt>()?.Hurt(Vector2.zero);
                     hurtCollider = canHurt;
                     return canHurt;
                 }
