@@ -350,7 +350,7 @@ MonoBehaviour:
   animationTransform: {fileID: 2363806901811200222}
   attackMaxCoolingTime: 2
   attackCoolingTime: 0
-  spikeMaxTime: 0.2
+  spikeMaxTime: 0.1
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
   maxAccumulateTime: 0.5
   damageStartTime: 2

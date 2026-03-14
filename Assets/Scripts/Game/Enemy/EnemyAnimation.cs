@@ -152,7 +152,7 @@ public class EnemyAnimation : MonoBehaviour
             else
             {
                 timer = 0;
-                state = AnimationState.Idle;
+                //state = AnimationState.Idle;
             }
         }
         else
