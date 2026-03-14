@@ -137,6 +137,7 @@ public class MeleeEnemy : Enemy
         
         
         enemyAnimation.SetIsGrounded(onGroundForJump);
+        enemyAnimation.IsFrozen = currentState == EnemyStateType.OnFroze;
         if (currentState == EnemyStateType.OnFroze || rb.velocity.x == 0)
         {
             enemyAnimation.SetMove(0);
