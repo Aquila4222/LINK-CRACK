@@ -28,7 +28,8 @@ public class Enemy : CatchableMono,IHurt
          currentState = EnemyStateType.Alive;
          detectEndOffsetDistance = new Vector3(-0.5f, -0.53f, 0);
          detectStartOffsetDistance = new Vector3(0.5f, -0.53f, 0);
-         whatIsGround = LayerMask.GetMask("Ground") + LayerMask.GetMask("Object") + LayerMask.GetMask("Player");
+         whatIsGround = LayerMask.GetMask("Ground") + LayerMask.GetMask("Object") + LayerMask.GetMask("Player") +
+                        LayerMask.GetMask("Platform");
          Health = 100;
      }
      
