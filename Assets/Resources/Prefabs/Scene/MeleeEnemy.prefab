@@ -320,8 +320,8 @@ MonoBehaviour:
   hurtCollider: {fileID: 0}
   detectedColliders: []
   attackColliders: []
-  detectRadius: 7
-  attackRadius: 2
+  detectRadius: 11
+  attackRadius: 3
   attackSize: {x: 1.1, y: 1.1, z: 0}
   jumpDetectionStartOffsetDistance: {x: -0.5, y: -0.53, z: 0}
   jumpDetectionEndOffsetDistance: {x: 0.5, y: -0.53, z: 0}
@@ -336,7 +336,7 @@ MonoBehaviour:
   whatIsObstruction:
     serializedVersion: 2
     m_Bits: 64
-  maxLockTime: 5
+  maxLockTime: 3
   lockTime: 0
   onGroundForJump: 0
   onGroundForFalling: 0
@@ -348,9 +348,8 @@ MonoBehaviour:
   idleTime: 0
   attackState: 0
   animationTransform: {fileID: 2363806901811200222}
-  attackMaxCoolingTime: 2
-  attackCoolingTime: 0
-  spikeMaxTime: 0.1
+  maxShakeAfterAttackTime: 1
+  spikeMaxTime: 0.2
   spikeOffsetDistance: {x: 10, y: 0, z: 0}
   maxAccumulateTime: 0.5
   damageStartTime: 2

@@ -12,8 +12,12 @@ public class RingVE : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    public void PlayEffect(Vector3 pos, float duration, Color color , float scale , float endScale,float startAlpha)
+    public void PlayEffect(Vector3 pos, float duration, Color color , float scale , float endScale,float startAlpha,Transform parent = null)
     {
+        if (parent)
+        {
+            transform.parent = parent;
+        }
         StartCoroutine(Play(pos, duration, color, scale, endScale,startAlpha));
     }
 

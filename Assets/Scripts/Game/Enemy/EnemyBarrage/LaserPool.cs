@@ -22,14 +22,4 @@ public class LaserPool : ObjectPoolTemplate<LaserPool>
             laser.Shoot(pos, direction);
         }
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Vector2 mouseScreenPosition = Input.mousePosition;
-            Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-            Shoot(new Vector3(0,10,0),mouseWorldPosition-new Vector2(0, 10));
-        }
-    }
 }
