@@ -17,8 +17,9 @@ public class RemoteLaserEnemy : Enemy
     [Header("敌人参数")]
     [SerializeField] public Vector3 facingDirection;
     [SerializeField] private Rigidbody2D rigidbody;
-    
-    [Header("弹幕参数")]
+
+    [Header("弹幕参数")] 
+    [SerializeField] public GameObject warningLine;
     [SerializeField] public Transform gunTransform;
     [SerializeField] public Transform bulletGenerateTransform;
     [SerializeField] public float angleOffset;
@@ -59,8 +60,9 @@ public class RemoteLaserEnemy : Enemy
     
     [Header("追击状态参数")] 
     [SerializeField] public float chaseSpeed;
-    
-    [Header("攻击状态参数")]
+
+    [Header("攻击状态参数")] 
+    [SerializeField] public float warningTime;
     [SerializeField] public float accumulateMaxTime;
     [SerializeField] public float maxAfterAttackShakeTime;
 
@@ -142,7 +144,7 @@ public class RemoteLaserEnemy : Enemy
     /// </summary>
     /// <param name="bulletPos"></param>
     /// <param name="bulletSpeed"></param>
-    public void ShootBullet(Vector3 bulletPos, Vector3 bulletSpeed)
+    public void ShootLaser(Vector3 bulletPos, Vector3 bulletSpeed)
     {
         LaserPool.Instance.Shoot(bulletPos, bulletSpeed);
     }
