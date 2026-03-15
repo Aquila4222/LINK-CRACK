@@ -23,6 +23,7 @@ public class MeleeEnemy : Enemy
     [SerializeField] public Rigidbody2D rigidBody;
     [SerializeField] private EnemyAnimation enemyAnimation;
     [SerializeField] private SpriteRenderer enemySpriteRenderer;
+    [SerializeField] public GameObject warningDirection;
 
     public delegate void Accumulate();
     public delegate void Spike();
@@ -135,7 +136,10 @@ public class MeleeEnemy : Enemy
     {
         base.Update();
 
-        
+        if (currentState == EnemyStateType.OnFroze)
+        {
+            warningDirection.SetActive(false);
+        }
         
         enemyAnimation.SetIsGrounded(onGroundForJump);
         enemyAnimation.IsFrozen = currentState == EnemyStateType.OnFroze;
@@ -181,6 +185,7 @@ public class MeleeEnemy : Enemy
                     canHurt.gameObject.GetComponent<IHurt>()?.Hurt(Vector2.zero);
                     hurtCollider = canHurt;
                     return canHurt;
+                    
                 }
             }
         }

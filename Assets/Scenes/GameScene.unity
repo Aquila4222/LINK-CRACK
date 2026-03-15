@@ -6407,6 +6407,18 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: maxShakeAfterAttackTime
       value: 0.5
       objectReference: {fileID: 0}
@@ -6478,6 +6490,22 @@ PrefabInstance:
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: spikeMaxTime
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.b
+      value: 0.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.g
+      value: 0.7058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
+      propertyPath: ObjectColor.r
+      value: 0.5411765
       objectReference: {fileID: 0}
     - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: attackMaxTime

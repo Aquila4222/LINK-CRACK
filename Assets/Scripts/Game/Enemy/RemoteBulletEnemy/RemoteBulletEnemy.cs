@@ -65,6 +65,9 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] private float maxLockTime;
     [SerializeField] private float lockTime;
 
+    [Header("待机状态参数")]
+    [SerializeField] public float maxTurnAroundTime;
+    
     [Header("追击状态参数")] 
     [SerializeField] public float chaseSpeed;
     

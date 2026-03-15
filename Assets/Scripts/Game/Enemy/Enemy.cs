@@ -21,6 +21,8 @@ public class Enemy : CatchableMono,IHurt
      private Vector3 detectStartOffsetDistance;
      private Vector3  detectEndOffsetDistance;
      protected LayerMask whatIsGround;
+     [SerializeField]private string SEName;
+     [SerializeField]private Color ObjectColor;
      public bool onSpike;
 
      private void Initialized()
@@ -111,6 +113,11 @@ public class Enemy : CatchableMono,IHurt
 
     private void OnDead()
     {
+        for (int i = 0; i < 20; i++)
+        {
+            PhysicalVEPool.Instance.Play(transform.position + new Vector3(Random.Range(-transform.localScale.x,transform.localScale.x),Random.Range(-transform.localScale.y,transform.localScale.y),1),Random.Range(1f,3f),Random.onUnitSphere.normalized*Random.Range(20f,30f),Vector3.one*0.4f,ObjectColor);
+        }
+        
         Destroy(this.gameObject);
     }
 
@@ -144,21 +151,21 @@ public class Enemy : CatchableMono,IHurt
         CameraControl.Instance.Shock(contact.point);
         for (int i = 0; i < 10; i++)
         {
+            Vector3 r = VectorRotator.RotateByAngle(contact.normal,Random.Range(-90f,90f));
+            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white,true);
+        }
+        
+        TakeDamage();
+        Hurt(new Vector2(0,0),1);
+    }
+    
+    private void TakeDamage()
+    {
+        SEPool.Instance.PlaySE(SEName,1f);
+        for (int i = 0; i < 10; i++)
+        {
             ParticleVEPool.Instance.Play(transform.position,0.2f*Random.Range(1,1.5f),10*Random.Range(1,1.5f),Random.onUnitSphere.normalized,new Vector3(0.01f,0.1f,0.1f),new Vector3(0.5f,0.5f,0.5f),Color.red,true);
         }
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.right, contact.normal);
-            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
-        }
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 r = VectorRotator.RotateLike(Vector2.up, Vector2.left, contact.normal);
-            ParticleVEPool.Instance.Play(contact.point,0.15f*Random.Range(1,1.5f),40*Random.Range(1,3f),r+Random.onUnitSphere.normalized/2,new Vector3(0.01f,0.5f,1),new Vector3(0.2f,0.7f,1),Color.white);
-        }
-        
-        
-        Hurt(new Vector2(0,0),1);
     }
 }
 

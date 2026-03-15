@@ -94,14 +94,16 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
     {
         Context.Move(0,Context.facingDirection);
         animationTransform.position = Context.transform.position;
+        Context.warningDirection.SetActive(false);
     }
 
     //战斗待机态
     public void OnIdle()
     {
         Context.onAttack = false;
+        Context.warningDirection.SetActive(true);
         targetLockDirection = (Context.targetTransform.position - Context.transform.position).normalized;
-        
+        Context.warningDirection.transform.up = targetLockDirection;
         if (attackStartTime > 0)
         {
             attackStartTime -= Time.deltaTime;
@@ -133,6 +135,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         }
         else
         {
+            Context.warningDirection.SetActive(false);
             AccumulateTime = maxAccumulateTime;
             attackState = MeleeAttackState.Spike;
             spikeForward = true;
