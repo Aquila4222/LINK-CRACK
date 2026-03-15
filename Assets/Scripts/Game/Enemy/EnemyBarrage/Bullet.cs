@@ -72,7 +72,7 @@ public class Bullet : MonoBehaviour
         else
         {
             timer = 0.04f;
-            RingVEPool.Instance.Play(transform.position,0.5f,Color.red,0.4f,0f);
+            RingVEPool.Instance.Play(transform.position,0.5f,Color.red,0.3f,0f);
 
         }
             
