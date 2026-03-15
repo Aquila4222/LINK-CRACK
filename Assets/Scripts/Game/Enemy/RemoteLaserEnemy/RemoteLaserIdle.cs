@@ -5,6 +5,7 @@ using UnityEngine;
 public class RemoteLaserIdle : IState<RemoteLaserState,RemoteLaserEnemy>
 {
 
+    private float turnAroundTime;
 
     public RemoteLaserEnemy Context { get; set; }
 
@@ -20,6 +21,16 @@ public class RemoteLaserIdle : IState<RemoteLaserState,RemoteLaserEnemy>
 
     public void OnState()
     {
+        if (turnAroundTime >= 0)
+        {
+            turnAroundTime -= Time.deltaTime;
+        }
+        else
+        {
+            turnAroundTime = Context.maxTurnAroundTime;
+            Context.TurnOrientation(new Vector3(Context.facingDirection.x * -1,0,0));
+        }
+        
         //状态转换
 
         if(Context.lockTarget && !Context.sightObstructed && Context.insight)

@@ -37,6 +37,10 @@ public class RemoteLaserAttack : IState<RemoteLaserState,RemoteLaserEnemy>
 
     public void OnState()
     {
+        if (Mathf.Approximately(accumulateCurrentTime, Context.accumulateMaxTime) && warningTime <= 0)
+        {
+            RingVEPool.Instance.Play(Context.accumulateRing.position,Context.accumulateMaxTime,Color.red, 1,0,1,Context.accumulateRing);
+        }
         
         if (warningTime > 0)
         {

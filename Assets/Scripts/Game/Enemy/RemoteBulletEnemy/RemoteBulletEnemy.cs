@@ -15,6 +15,7 @@ public enum RemoteBulletState
 public class RemoteBulletEnemy : Enemy
 {
     private FSM<RemoteBulletState, RemoteBulletEnemy> remoteFSM;
+    [SerializeField] private bool drawLine;
     
     [Header("调试检测参数")]
     [SerializeField] private RemoteBulletState currentRemoteState;
@@ -24,6 +25,7 @@ public class RemoteBulletEnemy : Enemy
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private SpriteRenderer enemySpriteRenderer;
     [SerializeField] private EnemyAnimation enemyAnimation;
+    [SerializeField] public Transform accumulateRing;
     
     [Header("弹幕参数")]
     [SerializeField] public Transform gunTransform;
@@ -253,5 +255,52 @@ public class RemoteBulletEnemy : Enemy
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        if (!drawLine) return;
+        // 确保必要组件不为空，避免空引用异常
+        if (this == null) return;
 
+
+        // 1. 绘制视野范围（圆形）
+        //    颜色：绿色表示当前看到玩家（insight 为 true），灰色表示未看到
+        Gizmos.color = insight ? Color.green : Color.gray;
+        Gizmos.DrawWireSphere(transform.position, alertRadius);
+        // 1. 绘制坠落检测射线（Move 方法中的射线）
+        //    射线起点 = transform.position + fallDetectionOffsetDistance（根据朝向调整 x）
+        Vector3 fallStart = transform.position + new Vector3(
+            fallDetectionOffsetDistance.x * facingDirection.x,
+            fallDetectionOffsetDistance.y,
+            fallDetectionOffsetDistance.z);
+        Vector3 fallDirection = Vector3.down;
+        float fallDistance = fallDetectionDistance;
+        Vector3 fallEnd = fallStart + fallDirection * fallDistance;
+
+        // 执行射线检测，判断是否击中地面（使用 whatIsGround，该字段可能定义在基类 Enemy 中）
+        bool hitGround = Physics2D.Raycast(fallStart, fallDirection, fallDistance, whatIsGround);
+
+        // 根据是否击中地面设置颜色：击中为绿色，未击中为黄色
+        Gizmos.color = hitGround ? Color.green : Color.yellow;
+        Gizmos.DrawLine(fallStart, fallEnd);
+        // 在起点绘制一个小球，便于观察位置
+        Gizmos.DrawSphere(fallStart, 0.1f);
+
+        // 2. 绘制视线阻挡检测射线（Detect 方法中的 Linecast）
+        //    只有当锁定目标存在时绘制
+        if (lockTarget && targetTransform != null)
+        {
+            Vector3 sightStart = transform.position;
+            Vector3 sightEnd = targetTransform.position;
+
+            // 执行 Linecast 检测是否被障碍物阻挡
+            bool obstructed = Physics2D.Linecast(sightStart, sightEnd, whatIsObstruction);
+
+            // 根据是否阻挡设置颜色：阻挡为红色，未阻挡为绿色
+            Gizmos.color = obstructed ? Color.red : Color.green;
+            Gizmos.DrawLine(sightStart, sightEnd);
+            // 在起点和终点绘制小球
+            Gizmos.DrawSphere(sightStart, 0.1f);
+            Gizmos.DrawSphere(sightEnd, 0.1f);
+        }
+    }
 }

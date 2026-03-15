@@ -127,6 +127,7 @@ public class MeleeAttack : IState<MeleeStateType,MeleeEnemy>
         if (Mathf.Approximately(AccumulateTime, maxAccumulateTime))
         {
             Context.InvokeAccumulate();
+            RingVEPool.Instance.Play(Context.transform.position,maxAccumulateTime,Color.red, 1,0,1,Context.transform);
         }
         
         if (AccumulateTime > 0)

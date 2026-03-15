@@ -680,10 +680,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3058989994708812638, guid: d30ec19c0e61c124dbe9f45be0d4c75a, type: 3}
-      propertyPath: SEName
-      value: Hurt
-      objectReference: {fileID: 0}
     - target: {fileID: 5947787320441538642, guid: d30ec19c0e61c124dbe9f45be0d4c75a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36.93
@@ -741,10 +737,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 680302291129337753, guid: 621be86de28b1164b97051978f4d1acc, type: 3}
-      propertyPath: SEName
-      value: Hurt
-      objectReference: {fileID: 0}
     - target: {fileID: 5407714020390697091, guid: 621be86de28b1164b97051978f4d1acc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -14.25287
@@ -802,10 +794,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1006867600830989535, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
-      propertyPath: SEName
-      value: Hurt
-      objectReference: {fileID: 0}
     - target: {fileID: 2650227762857021392, guid: 1ec27d69b8f329245a5c48a9168868f0, type: 3}
       propertyPath: m_Name
       value: MeleeEnemy

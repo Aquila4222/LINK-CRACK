@@ -255,6 +255,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1931468935093021616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6515862472523613609}
+  m_Layer: 0
+  m_Name: AccumulateVE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6515862472523613609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931468935093021616}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.57, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6050390721992668910}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2566291720783632607
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,6 +887,7 @@ Transform:
   m_Children:
   - {fileID: 6306817886671412011}
   - {fileID: 1941039488195714324}
+  - {fileID: 6515862472523613609}
   m_Father: {fileID: 5407714020390697091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7551309348493575408
@@ -994,11 +1026,15 @@ MonoBehaviour:
   canHurtOther: 0
   maxSpeed: {x: 0, y: 0}
   currentState: 0
+  SEName: Hurt
+  ObjectColor: {r: 1, g: 0, b: 0, a: 0.7058824}
   onSpike: 0
-  facingDirection: {x: 0, y: 0, z: 0}
+  drawLine: 1
+  facingDirection: {x: 1, y: 0, z: 0}
   rigidbody: {fileID: 0}
   enemySpriteRenderer: {fileID: 7620752646088466748}
   enemyAnimation: {fileID: 4184812514264602571}
+  accumulateRing: {fileID: 6515862472523613609}
   warningLine: {fileID: 2566291720783632607}
   gunTransform: {fileID: 6050390721992668910}
   bulletGenerateTransform: {fileID: 6306817886671412011}
@@ -1022,6 +1058,7 @@ MonoBehaviour:
   sightObstructed: 0
   maxLockTime: 3
   lockTime: 0
+  maxTurnAroundTime: 2
   chaseSpeed: 5
   warningTime: 0.5
   accumulateMaxTime: 0.5

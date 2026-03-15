@@ -33,6 +33,10 @@ public class RemoteBulletAttack : IState<RemoteBulletState,RemoteBulletEnemy>
 
     public void OnState()
     {
+        if (Mathf.Approximately(accumulateCurrentTime, Context.accumulateMaxTime))
+        {
+            RingVEPool.Instance.Play(Context.accumulateRing.position,Context.accumulateMaxTime,Color.red, 1,0,1,Context.accumulateRing);
+        }
         if (accumulateCurrentTime > 0)
         {
             accumulateCurrentTime -= Time.deltaTime;
