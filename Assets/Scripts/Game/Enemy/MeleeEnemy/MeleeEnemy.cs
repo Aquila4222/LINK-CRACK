@@ -209,7 +209,7 @@ public class MeleeEnemy : Enemy
 
     public override void Hurt(Vector2 repulseForce, float damage = 1)
     {
-        //base.Hurt(repulseForce, damage);
+        base.Hurt(repulseForce, damage);
         StartCoroutine(HurtEffect(enemySpriteRenderer));
     }
     

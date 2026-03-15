@@ -998,6 +998,7 @@ MonoBehaviour:
   currentRemoteState: 0
   facingDirection: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
+  enemySpriteRenderer: {fileID: 1478880710418299897}
   gunTransform: {fileID: 906585278253448806}
   bulletGenerateTransform: {fileID: 5577057361707053531}
   angleOffset: 0

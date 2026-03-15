@@ -22,6 +22,7 @@ public class RemoteBulletEnemy : Enemy
     [Header("敌人参数")]
     [SerializeField] public Vector3 facingDirection;
     [SerializeField] private Rigidbody2D rigidbody;
+    [SerializeField] private SpriteRenderer enemySpriteRenderer;
     
     [Header("弹幕参数")]
     [SerializeField] public Transform gunTransform;
@@ -109,6 +110,24 @@ public class RemoteBulletEnemy : Enemy
         
         Detect();
         remoteFSM.OnState();
+    }
+    
+    /// <summary>
+    /// 受伤接口
+    /// </summary>
+    /// <param name="repulseForce"></param>
+    /// <param name="damage"></param>
+    public override void Hurt(Vector2 repulseForce, float damage = 1)
+    {
+        base.Hurt(repulseForce, damage);
+        StartCoroutine(HurtEffect(enemySpriteRenderer));
+    }
+    
+    IEnumerator HurtEffect(SpriteRenderer spriteRenderer)
+    {
+        spriteRenderer.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.enabled = false;
     }
 
     /// <summary>
