@@ -998,6 +998,7 @@ MonoBehaviour:
   facingDirection: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
   enemySpriteRenderer: {fileID: 7620752646088466748}
+  enemyAnimation: {fileID: 4184812514264602571}
   warningLine: {fileID: 2566291720783632607}
   gunTransform: {fileID: 6050390721992668910}
   bulletGenerateTransform: {fileID: 6306817886671412011}

@@ -18,6 +18,7 @@ public class RemoteLaserEnemy : Enemy
     [SerializeField] public Vector3 facingDirection;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private SpriteRenderer enemySpriteRenderer;
+    [SerializeField] private EnemyAnimation enemyAnimation;
 
     [Header("弹幕参数")] 
     [SerializeField] public GameObject warningLine;
@@ -90,6 +91,13 @@ public class RemoteLaserEnemy : Enemy
     new void Update()
     {
         base.Update();
+        
+        enemyAnimation.SetIsGrounded(DetectOnGround());
+        enemyAnimation.IsFrozen = currentState == EnemyStateType.OnFroze;
+        if (currentState == EnemyStateType.OnFroze || rb.velocity.x == 0)
+        {
+            enemyAnimation.SetMove(0);
+        }
     }
     
     protected override void Alive()
@@ -128,6 +136,19 @@ public class RemoteLaserEnemy : Enemy
         else
         {
             rigidbody.velocity = Vector2.zero;
+        }
+        
+        if (direction.x > 0)
+        {
+            enemyAnimation.SetMove(1);
+        }
+        else if(direction.x < 0)
+        {
+            enemyAnimation.SetMove(-1);
+        }
+        else if (direction.x == 0)
+        {
+            enemyAnimation.SetMove(0);
         }
     }
     
