@@ -12,7 +12,7 @@ public class RingVEPool : ObjectPoolTemplate<RingVEPool>
         
         base.Awake();
     }
-    
+
     /// <summary>
     /// 播放环形特效
     /// </summary>
@@ -21,12 +21,14 @@ public class RingVEPool : ObjectPoolTemplate<RingVEPool>
     /// <param name="color">颜色</param>
     /// <param name="scale">整体大小</param>
     /// <param name="endScale">结束大小</param>
-    public void Play(Vector3 pos, float duration, Color color , float scale , float endScale , int startAlpha = 1)
+    /// <param name="startAlpha"></param>
+    /// <param name="parent"></param>
+    public void Play(Vector3 pos, float duration, Color color , float scale , float endScale , int startAlpha = 1,Transform parent =  null)
     {
         RingVE effect = GetObject().GetComponent<RingVE>();
         if (effect)
         {
-            effect.PlayEffect(pos, duration, color, scale, endScale, startAlpha);
+            effect.PlayEffect(pos, duration, color, scale, endScale, startAlpha,parent);
         }
     }
 }

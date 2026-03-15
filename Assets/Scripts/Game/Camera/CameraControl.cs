@@ -15,7 +15,7 @@ public class CameraControl : MonoBehaviour
     {
         _instance = this;
         cameraRB = GetComponent<Rigidbody2D>();
-        transform.position = new Vector3(PlayerTransform.position.x, PlayerTransform.position.y, transform.position.z) ;
+        transform.position = new Vector3(PlayerLife.SpawnPoint.x, PlayerLife.SpawnPoint.y, transform.position.z) ;
     }
 
     void FixedUpdate()

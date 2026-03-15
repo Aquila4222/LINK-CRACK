@@ -26,14 +26,4 @@ public class BulletPool : ObjectPoolTemplate<BulletPool>
             bullet.Shoot(pos,velocity);
         }
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Vector2 mouseScreenPosition = Input.mousePosition;
-            Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-            Shoot(new Vector3(0,10,0),(mouseWorldPosition-new Vector2(0, 10)).normalized*5f);
-        }
-    }
 }
