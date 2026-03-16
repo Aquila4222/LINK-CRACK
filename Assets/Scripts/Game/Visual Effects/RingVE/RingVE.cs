@@ -14,14 +14,10 @@ public class RingVE : MonoBehaviour
 
     public void PlayEffect(Vector3 pos, float duration, Color color , float scale , float endScale,float startAlpha,Transform parent = null)
     {
-        if (parent)
-        {
-            transform.parent = parent;
-        }
-        StartCoroutine(Play(pos, duration, color, scale, endScale,startAlpha));
+        StartCoroutine(Play(pos, duration, color, scale, endScale,startAlpha,parent));
     }
 
-    IEnumerator Play(Vector3 pos, float duration, Color color , float scale , float endScale,float startAlpha)
+    IEnumerator Play(Vector3 pos, float duration, Color color , float scale , float endScale,float startAlpha,Transform parent = null)
     {
         sr.color = new Color(color.r, color.g, color.b, startAlpha);
         transform.position = pos;
@@ -31,6 +27,11 @@ public class RingVE : MonoBehaviour
 
         while (timer < duration)
         {
+            if (parent)
+            {
+                transform.position = parent.position;
+            }
+            
             float i = timer/duration;
             float j = i*(2-i);
             
@@ -48,4 +49,5 @@ public class RingVE : MonoBehaviour
         
         RingVEPool.Instance.ReturnObject(gameObject);
     }
+    
 }

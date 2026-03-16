@@ -97,8 +97,12 @@ public abstract class ObjectPoolTemplate<T> :MonoSingletonHungry<T> where T : Ob
         {
             obj = CreateObject();
         }
+
+        if (obj != null)
+        {
+            obj.SetActive(true);
+        }
         
-        obj.SetActive(true);
         return obj;
     }
 

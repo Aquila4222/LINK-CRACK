@@ -16,6 +16,7 @@ public class RemoteLaserIdle : IState<RemoteLaserState,RemoteLaserEnemy>
     
     public void OnEnterState(RemoteLaserState lastState)
     {
+        turnAroundTime = Random.Range(Context.minTurnAroundTime, Context.maxTurnAroundTime);
         Context.InvokeStartIdle();
     }
 
@@ -27,7 +28,7 @@ public class RemoteLaserIdle : IState<RemoteLaserState,RemoteLaserEnemy>
         }
         else
         {
-            turnAroundTime = Context.maxTurnAroundTime;
+            turnAroundTime = Random.Range(Context.minTurnAroundTime, Context.maxTurnAroundTime);
             Context.TurnOrientation(new Vector3(Context.facingDirection.x * -1,0,0));
         }
         

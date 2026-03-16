@@ -65,6 +65,7 @@ public class RemoteLaserEnemy : Enemy
     
     [Header("待机状态参数")]
     [SerializeField] public float maxTurnAroundTime;
+    [SerializeField] public float minTurnAroundTime;
     
     [Header("追击状态参数")] 
     [SerializeField] public float chaseSpeed;

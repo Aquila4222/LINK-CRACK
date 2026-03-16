@@ -17,7 +17,7 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
     
     public void OnEnterState(RemoteBulletState lastState)
     {
-        turnAroundTime = Context.maxTurnAroundTime;
+        turnAroundTime = Random.Range(Context.minTurnAroundTime, Context.maxTurnAroundTime);
         Context.InvokeStartIdle();
     }
 
@@ -29,7 +29,7 @@ public class RemoteBulletIdle : IState<RemoteBulletState,RemoteBulletEnemy>
         }
         else
         {
-            turnAroundTime = Context.maxTurnAroundTime;
+            turnAroundTime = Random.Range(Context.minTurnAroundTime, Context.maxTurnAroundTime);
             Context.TurnOrientation(new Vector3(Context.facingDirection.x * -1,0,0));
         }
         

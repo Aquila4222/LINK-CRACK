@@ -1041,7 +1041,7 @@ MonoBehaviour:
   angleOffset: 0
   targetTransform: {fileID: 0}
   targetColliders: []
-  alertRadius: 5
+  alertRadius: 11
   fallDetectionOffsetDistance: {x: 0.5, y: -0.5, z: 0}
   fallDetectionDistance: 3
   whatIsPlayer:
@@ -1058,7 +1058,8 @@ MonoBehaviour:
   sightObstructed: 0
   maxLockTime: 3
   lockTime: 0
-  maxTurnAroundTime: 2
+  maxTurnAroundTime: 3
+  minTurnAroundTime: 1
   chaseSpeed: 5
   warningTime: 0.5
   accumulateMaxTime: 0.5

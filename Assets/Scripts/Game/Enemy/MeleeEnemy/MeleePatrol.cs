@@ -18,7 +18,7 @@ public class MeleePatrol : IState<MeleeStateType,MeleeEnemy>
 
     public void OnEnterState(MeleeStateType lastState)
     {
-        maxTurnAroundTime = Context.maxTurnAroundTime;
+        turnAroundTime = Random.Range(1f, maxTurnAroundTime);
         turnAroundTime = maxTurnAroundTime;
         patrolSpeed = Context.patrolSpeed;
     }
