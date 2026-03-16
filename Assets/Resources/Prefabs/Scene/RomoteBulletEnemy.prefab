@@ -1039,7 +1039,7 @@ MonoBehaviour:
   gunTransform: {fileID: 906585278253448806}
   bulletGenerateTransform: {fileID: 5577057361707053531}
   angleOffset: 0
-  bulletSpeed: 3
+  bulletSpeed: 5
   targetTransform: {fileID: 0}
   targetColliders: []
   alertRadius: 11
