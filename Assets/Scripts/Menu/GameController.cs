@@ -17,6 +17,7 @@ public class GameController : MonoSingletonHungry<GameController>
     void Awake()
     {
         Screen.SetResolution(2560, 1440, true);
+        Cursor.lockState = CursorLockMode.Confined;
     }
     
     public void Restart()
