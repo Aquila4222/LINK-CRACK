@@ -11,12 +11,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Player
+  - Enemy
+  - SpecialEffect
+  - Object
+  - Platform
   - 
   - 
   - 
@@ -38,6 +38,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 2705674553
+    locked: 0
+  - name: Back
+    uniqueID: 2746424159
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Chain
+    uniqueID: 3965517923
+    locked: 0
+  - name: Character
+    uniqueID: 2950550481
+    locked: 0
+  - name: Enemy
+    uniqueID: 1417456351
+    locked: 0
+  - name: SpecialEffect
+    uniqueID: 814227737
     locked: 0
