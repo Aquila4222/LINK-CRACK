@@ -11,11 +11,60 @@ public class CameraControl : MonoBehaviour
     private Rigidbody2D cameraRB;
     public float speed;
 
+    private Vector3 _movePosition;
+    private bool isFree;
+    public float FreeMoveSpeed;
+    
+    public AudioSource BGMSource;
+    private bool isBGMPlaying;
+    
+    
     void Awake()
     {
         _instance = this;
         cameraRB = GetComponent<Rigidbody2D>();
         transform.position = new Vector3(PlayerLife.SpawnPoint.x, PlayerLife.SpawnPoint.y, transform.position.z) ;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isFree = !isFree;
+            _movePosition = PlayerTransform.position;
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            _movePosition+=FreeMoveSpeed*Time.deltaTime*Vector3.right;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            _movePosition+=FreeMoveSpeed*Time.deltaTime*Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            _movePosition+=FreeMoveSpeed*Time.deltaTime*Vector3.up;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            _movePosition+=FreeMoveSpeed*Time.deltaTime*Vector3.down;
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+
+            if (isBGMPlaying)
+            {
+                BGMSource.Stop();
+            }
+            else
+            {
+                BGMSource.Play();
+            }
+            
+            isBGMPlaying = !isBGMPlaying;
+        }
     }
 
     void FixedUpdate()
@@ -29,7 +78,16 @@ public class CameraControl : MonoBehaviour
         {
             s = 1;
         }
-        cameraRB.velocity = (PlayerTransform.position-transform.position) * (speed * s);
+
+        if (!isFree)
+        {
+            cameraRB.velocity = (PlayerTransform.position-transform.position) * (speed * s);
+        }
+        else
+        {
+            cameraRB.velocity = (_movePosition - transform.position) * (speed * s);
+        }
+      
     }
     
     /// <summary>
@@ -69,4 +127,5 @@ public class CameraControl : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f*intense);
         Time.timeScale = 1;
     }
+    
 }
