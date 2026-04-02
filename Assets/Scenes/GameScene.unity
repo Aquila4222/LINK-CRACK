@@ -20335,6 +20335,7 @@ MonoBehaviour:
   PlayerTransform: {fileID: 403037975}
   speed: 10
   FreeMoveSpeed: 5
+  BGMSource: {fileID: 1759320602}
 --- !u!114 &1759320601
 MonoBehaviour:
   m_ObjectHideFlags: 0
