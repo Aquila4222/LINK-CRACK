@@ -20326,7 +20326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerTransform: {fileID: 403037975}
   speed: 10
-  FreeMoveSpeed: 5
+  FreeMoveSpeed: 10
   BGMSource: {fileID: 1759320602}
 --- !u!114 &1759320601
 MonoBehaviour:
